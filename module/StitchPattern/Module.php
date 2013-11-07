@@ -1,3 +1,4 @@
+<?php
 namespace StitchPattern;
 
  use StitchPattern\Model\StitchPattern;
@@ -39,7 +40,7 @@ class Module
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                      $resultSetPrototype = new ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new StitchPattern());
-                     return new TableGateway('album', $dbAdapter, null, $resultSetPrototype);
+                     return new TableGateway('stitchpattern', $dbAdapter, null, $resultSetPrototype);
                  },
              ),
          );

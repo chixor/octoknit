@@ -2,152 +2,217 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZendSkeletonApplication\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-05 22:17-0700\n"
-"PO-Revision-Date: 2012-07-05 22:17-0700\n"
-"Last-Translator: Evan Coury <me@evancoury.com>\n"
+"POT-Creation-Date: 2013-11-06 21:25-0000\n"
+"PO-Revision-Date: 2013-11-06 21:31-0000\n"
+"Last-Translator: \n"
 "Language-Team: ZF Contibutors <zf-devteam@zend.com>\n"
-"Language: \n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: translate\n"
-"X-Poedit-Language: English\n"
-"X-Poedit-Country: UNITED STATES\n"
 "X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SearchPath-0: ..\n"
-
-#: ../view/layout/layout.phtml:6
-#: ../view/layout/layout.phtml:33
-msgid "Skeleton Application"
-msgstr ""
-
-#: ../view/layout/layout.phtml:36
-msgid "Home"
-msgstr ""
-
-#: ../view/layout/layout.phtml:50
-msgid "All rights reserved."
-msgstr ""
+"X-Poedit-SearchPath-1: ../..\n"
 
 #: ../view/application/index/index.phtml:2
+#: ../../Application/view/application/index/index.phtml:2
 #, php-format
 msgid "Welcome to %sZend Framework 2%s"
 msgstr ""
 
 #: ../view/application/index/index.phtml:3
+#: ../../Application/view/application/index/index.phtml:3
 #, php-format
-msgid "Congratulations! You have successfully installed the %sZF2 Skeleton Application%s. You are currently running Zend Framework version %s. This skeleton can serve as a simple starting point for you to begin building your application on ZF2."
+msgid ""
+"Congratulations! You have successfully installed the %sZF2 Skeleton "
+"Application%s. You are currently running Zend Framework version %s. This "
+"skeleton can serve as a simple starting point for you to begin building your "
+"application on ZF2."
 msgstr ""
 
 #: ../view/application/index/index.phtml:4
+#: ../../Application/view/application/index/index.phtml:4
 msgid "Fork Zend Framework 2 on GitHub"
 msgstr ""
 
-#: ../view/application/index/index.phtml:10
+#: ../view/application/index/index.phtml:12
+#: ../../Application/view/application/index/index.phtml:12
 msgid "Follow Development"
 msgstr ""
 
-#: ../view/application/index/index.phtml:11
+#: ../view/application/index/index.phtml:15
+#: ../../Application/view/application/index/index.phtml:15
 #, php-format
-msgid "Zend Framework 2 is under active development. If you are interested in following the development of ZF2, there is a special ZF2 portal on the official Zend Framework website which provides links to the ZF2 %swiki%s, %sdev blog%s, %sissue tracker%s, and much more. This is a great resource for staying up to date with the latest developments!"
-msgstr ""
-
-#: ../view/application/index/index.phtml:12
-msgid "ZF2 Development Portal"
+msgid ""
+"Zend Framework 2 is under active development. If you are interested in "
+"following the development of ZF2, there is a special ZF2 portal on the "
+"official Zend Framework website which provides links to the ZF2 %swiki%s, "
+"%sdev blog%s, %sissue tracker%s, and much more. This is a great resource for "
+"staying up to date with the latest developments!"
 msgstr ""
 
 #: ../view/application/index/index.phtml:16
-msgid "Discover Modules"
-msgstr ""
-
-#: ../view/application/index/index.phtml:17
-#, php-format
-msgid "The community is working on developing a community site to serve as a repository and gallery for ZF2 modules. The project is available %son GitHub%s. The site is currently live and currently contains a list of some of the modules already available for ZF2."
-msgstr ""
-
-#: ../view/application/index/index.phtml:18
-msgid "Explore ZF2 Modules"
-msgstr ""
-
-#: ../view/application/index/index.phtml:22
-msgid "Help &amp; Support"
-msgstr ""
-
-#: ../view/application/index/index.phtml:23
-#, php-format
-msgid "If you need any help or support while developing with ZF2, you may reach us via IRC: %s#zftalk on Freenode%s. We'd love to hear any questions or feedback you may have regarding the beta releases. Alternatively, you may subscribe and post questions to the %smailing lists%s."
+#: ../../Application/view/application/index/index.phtml:16
+msgid "ZF2 Development Portal"
 msgstr ""
 
 #: ../view/application/index/index.phtml:24
+#: ../../Application/view/application/index/index.phtml:24
+msgid "Discover Modules"
+msgstr ""
+
+#: ../view/application/index/index.phtml:27
+#: ../../Application/view/application/index/index.phtml:27
+#, php-format
+msgid ""
+"The community is working on developing a community site to serve as a "
+"repository and gallery for ZF2 modules. The project is available %son GitHub"
+"%s. The site is currently live and currently contains a list of some of the "
+"modules already available for ZF2."
+msgstr ""
+
+#: ../view/application/index/index.phtml:28
+#: ../../Application/view/application/index/index.phtml:28
+msgid "Explore ZF2 Modules"
+msgstr ""
+
+#: ../view/application/index/index.phtml:36
+#: ../../Application/view/application/index/index.phtml:36
+msgid "Help &amp; Support"
+msgstr ""
+
+#: ../view/application/index/index.phtml:39
+#: ../../Application/view/application/index/index.phtml:39
+#, php-format
+msgid ""
+"If you need any help or support while developing with ZF2, you may reach us "
+"via IRC: %s#zftalk on Freenode%s. We'd love to hear any questions or "
+"feedback you may have regarding the beta releases. Alternatively, you may "
+"subscribe and post questions to the %smailing lists%s."
+msgstr ""
+
+#: ../view/application/index/index.phtml:40
+#: ../../Application/view/application/index/index.phtml:40
 msgid "Ping us on IRC"
 msgstr ""
 
-#: ../view/error/index.phtml:1
-msgid "An error occurred"
-msgstr ""
-
-#: ../view/error/index.phtml:8
-msgid "Additional information"
-msgstr ""
-
-#: ../view/error/index.phtml:11
-#: ../view/error/index.phtml:35
-msgid "File"
-msgstr ""
-
-#: ../view/error/index.phtml:15
-#: ../view/error/index.phtml:39
-msgid "Message"
-msgstr ""
-
-#: ../view/error/index.phtml:19
-#: ../view/error/index.phtml:43
-#: ../view/error/404.phtml:55
-msgid "Stack trace"
-msgstr ""
-
-#: ../view/error/index.phtml:29
-msgid "Previous exceptions"
-msgstr ""
-
-#: ../view/error/index.phtml:58
-msgid "No Exception available"
-msgstr ""
-
-#: ../view/error/404.phtml:1
+#: ../view/error/404.phtml:1 ../../Application/view/error/404.phtml:1
 msgid "A 404 error occurred"
 msgstr ""
 
-#: ../view/error/404.phtml:10
+#: ../view/error/404.phtml:10 ../../Application/view/error/404.phtml:10
 msgid "The requested controller was unable to dispatch the request."
 msgstr ""
 
-#: ../view/error/404.phtml:13
-msgid "The requested controller could not be mapped to an existing controller class."
+#: ../view/error/404.phtml:13 ../../Application/view/error/404.phtml:13
+msgid ""
+"The requested controller could not be mapped to an existing controller class."
 msgstr ""
 
-#: ../view/error/404.phtml:16
+#: ../view/error/404.phtml:16 ../../Application/view/error/404.phtml:16
 msgid "The requested controller was not dispatchable."
 msgstr ""
 
-#: ../view/error/404.phtml:19
+#: ../view/error/404.phtml:19 ../../Application/view/error/404.phtml:19
 msgid "The requested URL could not be matched by routing."
 msgstr ""
 
-#: ../view/error/404.phtml:22
+#: ../view/error/404.phtml:22 ../../Application/view/error/404.phtml:22
 msgid "We cannot determine at this time why a 404 was generated."
 msgstr ""
 
-#: ../view/error/404.phtml:34
+#: ../view/error/404.phtml:34 ../../Application/view/error/404.phtml:34
 msgid "Controller"
 msgstr ""
 
-#: ../view/error/404.phtml:41
+#: ../view/error/404.phtml:41 ../../Application/view/error/404.phtml:41
 #, php-format
 msgid "resolves to %s"
 msgstr ""
 
-#: ../view/error/404.phtml:51
-msgid "Exception"
+#: ../view/error/404.phtml:53 ../view/error/index.phtml:8
+#: ../../Application/view/error/404.phtml:53
+#: ../../Application/view/error/index.phtml:8
+msgid "Additional information"
 msgstr ""
 
+#: ../view/error/404.phtml:56 ../view/error/404.phtml:80
+#: ../view/error/index.phtml:11 ../view/error/index.phtml:35
+#: ../../Application/view/error/404.phtml:56
+#: ../../Application/view/error/404.phtml:80
+#: ../../Application/view/error/index.phtml:11
+#: ../../Application/view/error/index.phtml:35
+msgid "File"
+msgstr ""
+
+#: ../view/error/404.phtml:60 ../view/error/404.phtml:84
+#: ../view/error/index.phtml:15 ../view/error/index.phtml:39
+#: ../../Application/view/error/404.phtml:60
+#: ../../Application/view/error/404.phtml:84
+#: ../../Application/view/error/index.phtml:15
+#: ../../Application/view/error/index.phtml:39
+msgid "Message"
+msgstr ""
+
+#: ../view/error/404.phtml:64 ../view/error/404.phtml:88
+#: ../view/error/index.phtml:19 ../view/error/index.phtml:43
+#: ../../Application/view/error/404.phtml:64
+#: ../../Application/view/error/404.phtml:88
+#: ../../Application/view/error/index.phtml:19
+#: ../../Application/view/error/index.phtml:43
+msgid "Stack trace"
+msgstr ""
+
+#: ../view/error/404.phtml:74 ../view/error/index.phtml:29
+#: ../../Application/view/error/404.phtml:74
+#: ../../Application/view/error/index.phtml:29
+msgid "Previous exceptions"
+msgstr ""
+
+#: ../view/error/404.phtml:103 ../view/error/index.phtml:58
+#: ../../Application/view/error/404.phtml:103
+#: ../../Application/view/error/index.phtml:58
+msgid "No Exception available"
+msgstr ""
+
+#: ../view/error/index.phtml:1 ../../Application/view/error/index.phtml:1
+msgid "An error occurred"
+msgstr ""
+
+#: ../view/layout/layout.phtml:6 ../view/layout/layout.phtml:37
+#: ../../Application/view/layout/layout.phtml:6
+#: ../../Application/view/layout/layout.phtml:37
+msgid "Octoknit"
+msgstr ""
+
+#: ../view/layout/layout.phtml:41
+#: ../../Application/view/layout/layout.phtml:41
+msgid "Home"
+msgstr ""
+
+#: ../view/layout/layout.phtml:50
+#: ../../Application/view/layout/layout.phtml:50
+msgid "All rights reserved."
+msgstr ""
+
+#: ../../StitchPattern/view/stitch-pattern/stitch-pattern/index.phtml:2
+msgid "My Stitch Patterns"
+msgstr ""
+
+#: ../../StitchPattern/view/stitch-pattern/stitch-pattern/index.phtml:7
+msgid "Add new stitch pattern"
+msgstr ""
+
+#: ../../StitchPattern/view/stitch-pattern/stitch-pattern/index.phtml:12
+msgid "Title"
+msgstr ""
+
+#: ../../StitchPattern/view/stitch-pattern/stitch-pattern/index.phtml:20
+msgid "Edit"
+msgstr ""
+
+#: ../../StitchPattern/view/stitch-pattern/stitch-pattern/index.phtml:22
+msgid "Delete"
+msgstr ""

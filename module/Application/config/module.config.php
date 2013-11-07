@@ -15,7 +15,7 @@ return array(
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
-                        'controller' => 'Application\Controller\Index',
+                        'controller' => 'StitchPattern\Controller\StitchPattern',
                         'action'     => 'index',
                     ),
                 ),

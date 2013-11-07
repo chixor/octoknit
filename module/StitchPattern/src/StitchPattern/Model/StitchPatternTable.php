@@ -1,3 +1,4 @@
+<?php
  namespace StitchPattern\Model;
 
  use Zend\Db\TableGateway\TableGateway;
@@ -28,14 +29,13 @@
          return $row;
      }
 
-     public function saveStitchPattern(StitchPattern $album)
+     public function saveStitchPattern(StitchPattern $stitchpattern)
      {
          $data = array(
-             'artist' => $album->artist,
-             'title'  => $album->title,
+             'title'  => $stitchpattern->title,
          );
 
-         $id = (int) $album->id;
+         $id = (int) $stitchpattern->id;
          if ($id == 0) {
              $this->tableGateway->insert($data);
          } else {
