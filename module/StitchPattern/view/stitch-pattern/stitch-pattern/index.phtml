@@ -1,0 +1,30 @@
+ <?php
+ $title = $this->translate('My Stitch Patterns');
+ $this->headTitle($title);
+ ?>
+ <div>
+ <canvas width="940" height="510"/>
+ </div>
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+ <p>
+     <a href="<?php echo $this->url('stitchpattern', array('action'=>'add'));?>"><?= $this->translate('Add new stitch pattern'); ?></a>
+ </p>
+
+ <table class="table">
+ <tr>
+     <th><?= $this->translate('Title'); ?></th>
+     <th>&nbsp;</th>
+ </tr>
+ <?php foreach ($stitchpatterns as $stitchpattern) : ?>
+ <tr>
+     <td><?php echo $this->escapeHtml($stitchpattern->title);?></td>
+     <td>
+         <a href="<?php echo $this->url('stitchpattern',
+             array('action'=>'edit', 'id' => $stitchpattern->id));?>"><?= $this->translate('Edit'); ?></a>
+         <a href="<?php echo $this->url('stitchpattern',
+             array('action'=>'delete', 'id' => $stitchpattern->id));?>"><?= $this->translate('Delete'); ?></a>
+     </td>
+ </tr>
+ <?php endforeach; ?>
+ </table>
+<script type="text/javascript" src="js/customUtils.js"></script>
