@@ -1,0 +1,62 @@
+<div class="container container-page">
+ <?php
+
+ $title = $this->translate('Step 2. Upload');
+ $this->headTitle($title);
+ ?>
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+ <h3><?=$this->translate('a. plugin cable');?></h3>
+
+<p><?=$this->translate('Now we\'re ready to upload your design to the knitting machine. Time to plugin your USB to FTDI cable.');?></p>
+<p><?=$this->translate('');?></p>
+<?php if(!$this->usbCable) { ?>
+<div class="alert alert-danger">
+	<p><?=$this->translate('Oh oh! The USB cable doesn\'t seem to be plugged in.');?></p>
+</div>	
+<p><?=$this->translate('Please plug it in and press the below button when you\'re ready.');?></p>
+<a class="btn btn-primary btn-lg" href="/stitchpattern/upload/<?=$this->id?>">
+	<?=$this->translate('Cable plugged in');?>
+</a><br/><br/>
+<?php } else { ?>
+<div class="alert alert-success">
+	<p><?=$this->translate('Great! Your cable is plugged in.');?></p>
+</div>
+
+<h3><?=$this->translate('b. clear memory');?></h3>
+<p><?=$this->translate('We need to write to memory slot 901. To do this you have to wipe the machine\'s memory first. Enter the CLEAR WHOLE MEMORY command 888 followed by M and when that\'s done restart by turning the machine off and on again.');?></p>
+<p><?=$this->translate('Press the below button when you\'re ready to continue');?></p>
+<button class="btn btn-primary btn-lg" onclick="proceed()">
+	<?=$this->translate('Memory cleared');?>
+</button><br/><br/>
+
+<div id="process" class="hidden">
+<div class="alert alert-success">
+	<p><?=$this->translate('Great! Your knitting machine is powered on, plugged in and ready to accept files.');?></p>
+</div>
+<h3><?=$this->translate('c. upload');?></h3>
+<p><?=$this->translate('In order to upload to the knitting machine it needs to be in LOAD state. Press the load command 551 followed by M. It\'ll then ask for a track, simply enter 1 and press M.');?></p>
+<div id="scriptContainer"></div>
+<script type="text/javascript">
+var iframeHeight = 0;
+
+function proceed() {
+	$('#process').removeClass('hidden');
+	$('#scriptContainer').append($('<iframe id="data" src="/stitchpattern/pddemulate/<?=$this->id?>" width="600px" height="300px"></iframe>'));
+}
+
+window.setInterval(function() {
+	var iframe = $('#data').contents();
+	if(iframeHeight < iframe.height()) {
+		iframe.scrollTop(iframe.height());
+		iframeHeight = iframe.height();
+	}
+}, 500);
+</script>
+
+<p><?=$this->translate('The upload script above will run for a bit. When it reaches Logical Sector 31 your machine will beep and you\'re ready to knit! Have fun.');?></p>
+<a class="btn btn-primary btn-lg" href="/">
+	<?=$this->translate('Done. Return to homepage');?>
+</a><br/><br/>
+</div>
+<?php } ?>
+</div>

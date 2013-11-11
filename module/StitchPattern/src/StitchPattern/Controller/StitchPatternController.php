@@ -1,119 +1,158 @@
 <?php
- namespace StitchPattern\Controller;
+namespace StitchPattern\Controller;
 
- use Zend\Mvc\Controller\AbstractActionController;
- use Zend\View\Model\ViewModel;
- use StitchPattern\Model\StitchPattern;
- use StitchPattern\Form\StitchPatternForm;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+use StitchPattern\Model\StitchPattern;
+use StitchPattern\Form\StitchPatternForm;
 
- class StitchPatternController extends AbstractActionController
- {
-     protected $stitchpatternTable;
+class StitchPatternController extends AbstractActionController {
+	protected $stitchpatternTable;
+	protected $emulatorbridge;
 
-     public function indexAction()
-     {
-         return new ViewModel(array(
-             'stitchpatterns' => $this->getStitchPatternTable()->fetchAll(),
-         ));
-     }
+	public function indexAction() {
+		if ($this -> zfcUserAuthentication() -> hasIdentity()) {
+			return new ViewModel( array('stitchpatterns' => $this -> getStitchPatternTable() -> fetchAll($this -> zfcUserAuthentication() -> getIdentity() -> getId())));
+		} else {
+			return new ViewModel( array('stitchpatterns' => $this -> getStitchPatternTable() -> fetchPublic()));
+		}
 
-     public function addAction()
-     {
-         $form = new StitchPatternForm();
-         $form->get('submit')->setValue('Add');
+	}
 
-         $request = $this->getRequest();
-         if ($request->isPost()) {
-             $stitchpattern = new StitchPattern();
-             $form->setInputFilter($stitchpattern->getInputFilter());
-             $form->setData($request->getPost());
+	public function addAction() {
+		$form = new StitchPatternForm();
+		$form -> get('submit') -> setValue('Add');
 
-             if ($form->isValid()) {
-                 $stitchpattern->exchangeArray($form->getData());
-                 $this->getStitchPatternTable()->saveStitchPattern($stitchpattern);
+		$request = $this -> getRequest();
+		if ($request -> isPost()) {
+			$stitchpattern = new StitchPattern();
+			$form -> setInputFilter($stitchpattern -> getInputFilter());
+			$form -> setData($request -> getPost());
 
-                 // Redirect to list of stitchpatterns
-                 return $this->redirect()->toRoute('stitchpattern');
-             }
-         }
-         return array('form' => $form);
-     }
+			if ($form -> isValid()) {
+				$stitchpattern -> exchangeArray($form -> getData());
+				$this -> getStitchPatternTable() -> saveStitchPattern($stitchpattern);
 
-     public function editAction()
-     {
-         $id = (int) $this->params()->fromRoute('id', 0);
-         if (!$id) {
-             return $this->redirect()->toRoute('stitchpattern', array(
-                 'action' => 'add'
-             ));
-         }
+				// Redirect to list of stitchpatterns
+				return $this -> redirect() -> toRoute('stitchpattern');
+			}
+		}
+		return array('form' => $form);
+	}
 
-         // Get the StitchPattern with the specified id.  An exception is thrown
-         // if it cannot be found, in which case go to the index page.
-         try {
-             $stitchpattern = $this->getStitchPatternTable()->getStitchPattern($id);
-         }
-         catch (\Exception $ex) {
-             return $this->redirect()->toRoute('stitchpattern', array(
-                 'action' => 'index'
-             ));
-         }
+	public function editAction() {
+		$id = (int)$this -> params() -> fromRoute('id', 0);
+		if (!$id) {
+			return $this -> redirect() -> toRoute('stitchpattern', array('action' => 'add'));
+		}
 
-         $form  = new StitchPatternForm();
-         $form->bind($stitchpattern);
-         $form->get('submit')->setAttribute('value', 'Edit');
+		// Get the StitchPattern with the specified id.  An exception is thrown
+		// if it cannot be found, in which case go to the index page.
+		try {
+			$stitchpattern = $this -> getStitchPatternTable() -> getStitchPattern($id);
+		} catch (\Exception $ex) {
+			return $this -> redirect() -> toRoute('stitchpattern', array('action' => 'index'));
+		}
 
-         $request = $this->getRequest();
-         if ($request->isPost()) {
-             $form->setInputFilter($stitchpattern->getInputFilter());
-             $form->setData($request->getPost());
+		$form = new StitchPatternForm();
+		$form -> bind($stitchpattern);
+		$form -> get('submit') -> setAttribute('value', 'Edit');
 
-             if ($form->isValid()) {
-                 $this->getStitchPatternTable()->saveStitchPattern($stitchpattern);
+		$request = $this -> getRequest();
+		if ($request -> isPost()) {
+			$form -> setInputFilter($stitchpattern -> getInputFilter());
+			$form -> setData($request -> getPost());
 
-                 // Redirect to list of stitchpatterns
-                 return $this->redirect()->toRoute('stitchpattern');
-             }
-         }
+			if ($form -> isValid()) {
+				$this -> getStitchPatternTable() -> saveStitchPattern($stitchpattern);
 
-         return array(
-             'id' => $id,
-             'form' => $form,
-         );
-     }
+				// Redirect to list of stitchpatterns
+				return $this -> redirect() -> toRoute('stitchpattern');
+			}
+		}
 
-     public function deleteAction()
-     {
-         $id = (int) $this->params()->fromRoute('id', 0);
-         if (!$id) {
-             return $this->redirect()->toRoute('stitchpattern');
-         }
+		return array('id' => $id, 'form' => $form, );
+	}
 
-         $request = $this->getRequest();
-         if ($request->isPost()) {
-             $del = $request->getPost('del', 'No');
+	public function deleteAction() {
+		$id = (int)$this -> params() -> fromRoute('id', 0);
+		if (!$id) {
+			return $this -> redirect() -> toRoute('stitchpattern');
+		}
 
-             if ($del == 'Yes') {
-                 $id = (int) $request->getPost('id');
-                 $this->getStitchPatternTable()->deleteStitchPattern($id);
-             }
+		$request = $this -> getRequest();
+		if ($request -> isPost()) {
+			$del = $request -> getPost('del', 'No');
 
-             // Redirect to list of stitchpatterns
-             return $this->redirect()->toRoute('stitchpattern');
-         }
+			if ($del == 'Yes') {
+				$id = (int)$request -> getPost('id');
+				$this -> getStitchPatternTable() -> deleteStitchPattern($id);
+			}
 
-         return array(
-             'id'    => $id,
-             'stitchpattern' => $this->getStitchPatternTable()->getStitchPattern($id)
-         );
-     }
+			// Redirect to list of stitchpatterns
+			return $this -> redirect() -> toRoute('stitchpattern');
+		}
 
-     public function getStitchPatternTable()
-     {
-         if (!$this->stitchpatternTable) {
-             $sm = $this->getServiceLocator();
-             $this->stitchpatternTable = $sm->get('StitchPattern\Model\StitchPatternTable');
-         }
-         return $this->stitchpatternTable;
-     }
- }
+		return array('id' => $id, 'stitchpattern' => $this -> getStitchPatternTable() -> getStitchPattern($id));
+	}
+
+	public function convertAction() {
+		$id = (int)$this -> params() -> fromRoute('id', 0);
+		if (!$id) {
+			return $this -> redirect() -> toRoute('stitchpattern');
+		}
+		$pattern = $this -> getStitchPatternTable() -> getStitchPattern($id);
+
+		return array(
+			'result' => $this -> getEmulatorBridge() -> convert($id, $pattern -> title, $pattern -> stitches),
+			'imageURL' => $this -> getEmulatorBridge() -> getImagePath(),
+			'id' => $id
+		);
+	}
+
+	public function uploadAction() {
+		$id = (int)$this -> params() -> fromRoute('id', 0);
+		if (!$id) {
+			return $this -> redirect() -> toRoute('stitchpattern');
+		}
+		$pattern = $this -> getStitchPatternTable() -> getStitchPattern($id);
+
+		if (shell_exec('ls /dev/cu.usbserial-A4WYNI7I') == null)
+			$usbCable = false;
+		else
+			$usbCable = true;
+
+		return array(
+			'usbCable' => $usbCable,
+			'id' => $id
+		);
+	}
+	
+	public function pddemulateAction() {
+		$id = (int)$this -> params() -> fromRoute('id', 0);
+		if (!$id) {
+			return $this -> redirect() -> toRoute('stitchpattern');
+		}
+		$pattern = $this -> getStitchPatternTable() -> getStitchPattern($id);
+
+		$this -> getEmulatorBridge() -> pddemulate($id, $pattern -> title);
+
+		return $this->response;
+	}
+
+	public function getStitchPatternTable() {
+		if (!$this -> stitchpatternTable) {
+			$sm = $this -> getServiceLocator();
+			$this -> stitchpatternTable = $sm -> get('StitchPattern\Model\StitchPatternTable');
+		}
+		return $this -> stitchpatternTable;
+	}
+
+	public function getEmulatorBridge() {
+		if (!$this -> emulatorbridge) {
+			$sm = $this -> getServiceLocator();
+			$this -> emulatorbridge = $sm -> get('StitchPattern\Model\EmulatorBridge');
+		}
+		return $this -> emulatorbridge;
+	}
+}

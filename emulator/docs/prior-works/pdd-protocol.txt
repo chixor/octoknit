@@ -1,0 +1,272 @@
+This is by Paul Globman.
+
+
+The following discussion will outline the communication 
+structure needed to address the PDD.  I will discuss both 
+the FDC mode and the BROTHER mode.
+
+                    PACKET PROTOCOL
+
+BROTHER mode is the most commonly used PDD mode and requires
+packet protocol.
+
+Every packet is structured exactly alike.  The format of the
+packet is as follows:
+
++--+-+-+----------------------------+-+
+|2 |1|1|  0 to 128                  |1|
++--+-+-+----------------------------+-+
+ ^  ^ ^     block data               ^
+ |  | |____ block data length        |
+ |  |______ block form               |
+ |_________ preamble                 |
+            checksum_________________|
+
+preamble:       sync bytes (ascii "ZZ")
+block form:     disk command (0-12)
+block data len: data length (0-128)
+block data:     data sent (0-128 bytes)
+checksum:       sum from block form to
+                checksum is FFH (LSD).
+
+The composition of the block data will vary from one command
+(block form) to another.  There are 12 block forms.
+
+block
+form     description
+------   ------------
+   0     directory search
+   1     open file
+   2     close file
+   3     read request
+   4     write data
+   5     kill file
+   6     format
+   7     interrogate
+   8     change to FDC mode
+
+  10     read data
+  11     directory info
+  12     return info
+
+Block forms 0-8:    data sent to PDD.
+Block forms 10-12:  block data sent by
+                    PDD to host.
+
+^P
+                    BLOCK FORM COMMANDS
+
+BLOCK FORM 0  (directory search)
+
+Block data form (26 bytes)
++---------------------------+-----+-+-+
+|   20 bytes                |  4  |1|1|
++---------------------------+-----+-+-+
+      file name                ^   ^ ^
+      null_____________________|   | |
+      attribute____________________| |
+      search form____________________|
+
+file name:    first character non-blank
+null:         add 4 blanks to file name
+attribute:    any letter is acceptable
+search form:  (0) search for file by 
+                  name and attribute.
+                  output file info.
+                  use for file open or
+                  file kill operation.
+              (1) begin sequential dir
+                  search and output 1st
+                  file info.  file name
+                  and attribute not
+                  required.
+             (2) continue sequential
+                  dir search and output
+                  file info.  file name
+                  and attribute not
+                  required.
+
+
+BLOCK FORM 1  (open file specified by block form 0)
+
+Block data format (1 byte)
++---------+
+|  1 byte |
++---------+
+ open form
+
+open form:  (1) to open new file. error
+                if no room in directory
+            (2) to open for append.
+            (3) to open for read.
+
+
+BLOCK FORM 2  (close the open file)
+              (register file opened by
+               open form 1 or 2 in the
+               directory.)
+
+Block data format:  NONE
+
+^P
+BLOCK FORM 3  (read request)
+              (PDD sends data from file
+               opened by open form 3)
+
+Block data format:  NONE
+
+
+BLOCK FORM 4  (write data to file
+               opened by open form 1 or
+               open form 2.)
+
+Block data form (1 to 128 bytes)
++---------------------------+
+|  1 to 128 bytes           |
++---------------------------+
+ file data to be written in file
+
+
+BLOCK FORM 5  (kill file specified by
+               search form 0)
+
+Block data format:  NONE
+
+
+BLOCK FORM 6  (initialize=format disk)
+
+Block data format:  NONE
+
+
+BLOCK FORM 7  (interrogate ready status
+               initiate block comm.
+               sequence of PDD.  block
+               communication error will
+               not occur if this is
+               used.)
+
+Block data format:  NONE
+
+
+BLOCK FORM 8  (move into FCD mode)
+
+Block data format:  NONE
+
+
+BLOCK FORM 10  (send file data to host
+               according to the request
+               of file data)
+
+Block data form (1 to 128 bytes)
++---------------------------+
+|  1 to 128 bytes           |
++---------------------------+
+      data read from file
+
+^P
+BLOCK FORM 11  (send directory info to
+               host according to the
+               directory reference
+               command from host)
+
+Block data form (28 bytes)
++-----------------------+-+-+--+-+--+-+
+|   20 bytes            |1|1| 2|1| 2|1|
++-----------------------+-+-+--+-+--+-+
+      file name          ^ ^  ^ ^  ^ ^
+      0FFH_______________| |  | |  | |
+      00H__________________|  | |  | |
+      left block amount_______| |  | |
+      attribute_________________|  | |
+      file size____________________| |
+      left sector amount_____________|
+
+file name:    same as dir. ref but when
+attribute:    there is no designated
+              file or all of dir. info
+              has been output at 
+              sequential search, file
+              name and attribute are
+              set to null.
+lft blk amt:  unused block amount of
+              the disk (1 block = 256
+              bytes). Set to NULL for
+              PDD1.
+file size:    designated file size.
+              Byte amount (1 to 65535).
+lft sctr amt: unused sector amount of
+              the disk (1 sector = 1280
+              bytes).  Set this amount
+              as integer part of (left
+              block amount/5) for PDD2.
+
+
+BLOCK FORM 12  (return information for
+               normal end responses to
+               commands except dir.
+               reference, file data
+               request, and mode
+               change.  Also ERROR
+               responses except for DTR
+               going LOW.)
+
+Block data format (1 byte)
++---------+
+|  1 byte |
++---------+
+return code    Meaning
+-----------    -------------------
+ 00h           Normal end
+ 30h           Parameter error or block
+                 sequence error.
+ 4Xh           Read error
+ 50h           Write protect
+ 60h           Shortage of disk space
+ 7Xh           Disk mount error
+ 8Xh           Hardware error
+
+^P
+
+This is a preliminary file.
+I will update it regularly until it is complete.
+
+For those who want to experiment, the following basic 
+program will KILL "SEARCH.DO" from the PDD (no error 
+detection).  If you wanted to FORMAT the disk, LINE 32 would
+be:
+
+32 PRINT#1,FM$
+
+...and LINE 33 can be eliminated.
+
+
+0 'Packet testing by Paul Globman
+1 '                    Feb. 1986
+2 '
+5 MAXFILES=3:GOTO100
+30 PRINT#1,RY$:GOSUB 1000
+32 PRINT#1,D$(0):GOSUB 1000
+33 PRINT#1,KL$
+99 END
+100 D$(0)="ZZ"+CHR$(0)+CHR$(26)+"SEARCH.DO               "+
+CHR$(70)+CHR$(0)+CHR$(72)
+101 D$(1)="ZZ"+CHR$(0)+CHR$(26)+"                        "+
+CHR$(70)+CHR$(1)+CHR$(158)
+102 D$(2)="ZZ"+CHR$(0)+CHR$(26)+"                        "+
+CHR$(70)+CHR$(2)+CHR$(157)
+110 O$(1)="ZZ"+CHR$(1)+CHR$(1)+CHR$(1)+CHR$(252)
+111 O$(2)="ZZ"+CHR$(1)+CHR$(1)+CHR$(2)+CHR$(251)
+112 O$(3)="ZZ"+CHR$(1)+CHR$(1)+CHR$(3)+CHR$(250)
+115 CL$="ZZ"+CHR$(2)+CHR$(0)+CHR$(253)
+120 RD$="ZZ"+CHR$(3)+CHR$(0)+CHR$(252)
+130 'WR$="ZZ"+CHR$(4)+CHR$(0)+CHR$(251)
+140 KL$="ZZ"+CHR$(5)+CHR$(0)+CHR$(250)+CHR$(13)
+150 FM$="ZZ"+CHR$(6)+CHR$(0)+CHR$(249)
+160 RY$="ZZ"+CHR$(7)+CHR$(0)+CHR$(248)+CHR$(13)
+180 OPEN"COM:98N1DNN"FOR OUTPUT AS 1
+190 OPEN"COM:98N1DNN"FOR INPUT AS 2
+299 GOTO30
+1000 'WAIT
+1010 FOR I=1 TO 1000:NEXT:RETURN
+
+

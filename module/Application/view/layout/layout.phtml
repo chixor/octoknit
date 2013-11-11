@@ -11,7 +11,7 @@
         ?>
 
         <!-- Le styles -->
-        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+        <?php echo $this->headLink()
                         ->prependStylesheet($this->basePath() . '/css/style.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
@@ -23,33 +23,58 @@
             ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
             ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
         ; ?>
-
+		<link href='http://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
+		<link rel="icon" href="/img/knit_favicon.png"> 
     </head>
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
                     <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Octoknit') ?></a>
                 </div>
                 <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
-                    </ul>
+
+				<?php if(!$this->zfcUserIdentity()): ?>
+				<?php //echo $this->zfcUserLoginWidget(array('redirect'=>'application')); ?>
+				<form class="navbar-form navbar-right" role="login" action="/user/login" method="post">
+				  <div class="form-group">
+				    <input type="text" class="form-control" placeholder="email" name="identity">
+				  </div>
+				  <div class="form-group">
+				    <input type="password" class="form-control" placeholder="password" name="credential">
+				  </div>
+				  <button type="submit" class="btn btn-default">Login</button>
+				</form>
+				
+				<?php else: ?>
+				<ul class="nav navbar-nav navbar-right">
+		            <li id="fat-menu" class="dropdown">
+		              <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">
+						<?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()) ?>
+						<?php echo $this->zfcUserIdentity()->getDisplayName(); ?>
+						 <b class="caret"></b></a>
+		              <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+		              	<!--
+		                <li role="presentation"><a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Action</a></li>
+		                <li role="presentation"><a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Another action</a></li>
+		               -->
+		                <li role="presentation"><a role="menuitem" tabindex="-1" href="/user">Profile</a></li>
+		                <li role="presentation" class="divider"></li>
+		                <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/logout">Logout</a></li>
+		              </ul>
+		            </li>
+				</ul>
+
+				<?php endif?>
                 </div><!--/.nav-collapse -->
+
             </div>
         </nav>
-        <div class="container">
             <?php echo $this->content; ?>
             <hr>
             <footer>
-                <p>&copy; Chixor <?php echo $this->translate('All rights reserved.') ?></p>
+                <p>&copy; chixor <?php echo $this->translate('All rights reserved.') ?></p>
             </footer>
-        </div> <!-- /container -->
         <?php echo $this->inlineScript() ?>
     </body>
 </html>

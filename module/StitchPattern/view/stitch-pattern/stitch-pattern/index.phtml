@@ -1,30 +1,51 @@
- <?php
- $title = $this->translate('My Stitch Patterns');
- $this->headTitle($title);
- ?>
- <div>
- <canvas width="940" height="510"/>
- </div>
- <h1><?php echo $this->escapeHtml($title); ?></h1>
- <p>
-     <a href="<?php echo $this->url('stitchpattern', array('action'=>'add'));?>"><?= $this->translate('Add new stitch pattern'); ?></a>
- </p>
+<?php
+	$title = $this->translate('My Stitch Patterns');
+	$this->headTitle($title);
+?>
+<?php if(!$this->zfcUserIdentity()) { ?>
+<div class="jumbotron">
+	<div class="container">
+		<h1><?= $this->translate('Machine knitting made easier'); ?></h1>
+		<p><?= $this->translate('Design your own stitch patterns and turn them into beautiful knits with your'); ?> <a href=""><?=$this->translate('Brother 950i');?></a>.</p>
+		<a class="btn btn-primary btn-lg" href="/user/register">
+			<?=$this->translate('Get started');?> »
+		</a>
+	</div>
+</div>
+<div class="container">
+	<h2><?=$this->translate('Public Patterns');?></h2>
+<?php } else { ?>
+<div class="container container-items">
+	<a class="btn btn-primary" href="<?php echo $this->url('stitchpattern', array('action'=>'add'));?>">
+	<span class="glyphicon glyphicon-plus"></span>
+	<?= $this->translate('New Pattern'); ?></a>
+<?php } ?>
 
- <table class="table">
- <tr>
-     <th><?= $this->translate('Title'); ?></th>
-     <th>&nbsp;</th>
- </tr>
- <?php foreach ($stitchpatterns as $stitchpattern) : ?>
- <tr>
-     <td><?php echo $this->escapeHtml($stitchpattern->title);?></td>
-     <td>
-         <a href="<?php echo $this->url('stitchpattern',
-             array('action'=>'edit', 'id' => $stitchpattern->id));?>"><?= $this->translate('Edit'); ?></a>
-         <a href="<?php echo $this->url('stitchpattern',
-             array('action'=>'delete', 'id' => $stitchpattern->id));?>"><?= $this->translate('Delete'); ?></a>
-     </td>
- </tr>
- <?php endforeach; ?>
- </table>
-<script type="text/javascript" src="js/customUtils.js"></script>
+<section class="list <?php if(!$this->zfcUserIdentity()) echo 'public '; ?>cf">
+<?php foreach ($stitchpatterns as $key=>$stitchpattern) { ?>
+	<article>
+		<div>
+			<img src="<?php echo $this->escapeHtml($stitchpattern->preview);?>"/>
+			<h4><?php echo $this->escapeHtml($stitchpattern->title);?></h4>
+			<?php if($this->zfcUserIdentity()) { ?>
+				<a class="btn btn-default btn-xs" href="<?php echo $this->url('stitchpattern',
+					array('action'=>'edit', 'id' => $stitchpattern->id));?>">
+					<span class="glyphicon glyphicon-pencil"></span>
+				</a>
+				<a class="btn btn-danger btn-xs" href="<?php echo $this->url('stitchpattern',
+					array('action'=>'delete', 'id' => $stitchpattern->id));?>">
+					<span class="glyphicon glyphicon-remove"></span>
+				</a>
+				<a class="btn btn-primary btn-xs" href="<?php echo $this->url('stitchpattern',
+					array('action'=>'share', 'id' => $stitchpattern->id));?>">
+					<span class="glyphicon glyphicon-share-alt"></span>
+				</a>
+			<?php } ?>
+			<a class="btn btn-success btn-xs" href="<?php echo $this->url('stitchpattern',
+				array('action'=>'convert', 'id' => $stitchpattern->id));?>">
+				<?= $this->translate('Knit it'); ?> »
+			</a>
+		</div>
+	</article>
+<?php } ?>
+</section>

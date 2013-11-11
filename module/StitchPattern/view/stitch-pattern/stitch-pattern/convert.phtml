@@ -1,0 +1,22 @@
+<div class="container container-page">
+ <?php
+
+ $title = $this->translate('Step 1. Convert image to tracks');
+ $this->headTitle($title);
+ ?>
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+ <p><?=$this->translate('The Brother electroknit machines expect to talk to a tandy floppy drive to load patterns from. We\'re going to be a bit sneaky and pretend we\'re using one so we\'ve gone ahead and converted your design into tracks. Your Brother 950i will like that.');?></p>
+ <p><?=$this->translate('If you see your pattern below in a series of stars (*) and upside down then all is well and we can proceed. Yes, your knitting machine thinks upside down!');?></p>
+ <p><?=$this->translate('NOTE: you may need to make your browser wider to see it properly.');?></p>
+<a class="btn btn-success btn-lg" href="<?php echo $this->url('stitchpattern',
+	array('action'=>'upload', 'id' => $id));?>">
+	<?= $this->translate('Step 2. Upload'); ?> »
+</a>
+<br/><br/>
+ <!-- <img src="<?=$imageURL ?>"/> -->
+ <pre>
+ <code>
+ <?=$result?>
+ </code>
+ </pre>
+</div>

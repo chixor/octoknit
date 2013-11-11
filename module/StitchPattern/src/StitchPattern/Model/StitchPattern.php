@@ -9,12 +9,16 @@
  {
      public $id;
      public $title;
+     public $preview;
+	 public $stitches;
      protected $inputFilter;
 
      public function exchangeArray($data)
      {
          $this->id     = (!empty($data['id'])) ? $data['id'] : null;
          $this->title  = (!empty($data['title'])) ? $data['title'] : null;
+         $this->preview  = (!empty($data['preview'])) ? $data['preview'] : null;
+         $this->stitches  = (!empty($data['stitches'])) ? $data['stitches'] : null;
      }
 
      public function getArrayCopy()
@@ -57,6 +61,24 @@
                          ),
                      ),
                  ),
+             ));
+
+             $inputFilter->add(array(
+                 'name'     => 'preview',
+                 'required' => true,
+                 'filters'  => array(
+                     array('name' => 'StripTags'),
+                     array('name' => 'StringTrim'),
+                 )
+             ));
+
+             $inputFilter->add(array(
+                 'name'     => 'stitches',
+                 'required' => true,
+                 'filters'  => array(
+                     array('name' => 'StripTags'),
+                     array('name' => 'StringTrim'),
+                 )
              ));
 
              $this->inputFilter = $inputFilter;

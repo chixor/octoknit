@@ -12,9 +12,15 @@
          $this->tableGateway = $tableGateway;
      }
 
-     public function fetchAll()
+     public function fetchAll($id)
      {
-         $resultSet = $this->tableGateway->select();
+         $resultSet = $this->tableGateway->select(array('user_id' => $id));
+         return $resultSet;
+     }
+
+     public function fetchPublic()
+     {
+         $resultSet = $this->tableGateway->select(array('shared' => true));
          return $resultSet;
      }
 
@@ -33,6 +39,8 @@
      {
          $data = array(
              'title'  => $stitchpattern->title,
+             'preview'  => $stitchpattern->preview,
+             'stitches'  => $stitchpattern->stitches
          );
 
          $id = (int) $stitchpattern->id;

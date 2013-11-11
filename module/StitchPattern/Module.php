@@ -3,6 +3,7 @@ namespace StitchPattern;
 
  use StitchPattern\Model\StitchPattern;
  use StitchPattern\Model\StitchPatternTable;
+ use StitchPattern\Model\EmulatorBridge;
  use Zend\Db\ResultSet\ResultSet;
  use Zend\Db\TableGateway\TableGateway;
 
@@ -35,6 +36,10 @@ class Module
                      $tableGateway = $sm->get('StitchPatternTableGateway');
                      $table = new StitchPatternTable($tableGateway);
                      return $table;
+                 },
+                 'StitchPattern\Model\EmulatorBridge' =>  function($sm) {
+                     $emulator = new EmulatorBridge();
+                     return $emulator;
                  },
                  'StitchPatternTableGateway' => function ($sm) {
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');

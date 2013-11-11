@@ -3,9 +3,9 @@
     var lastTime = 0;
     var vendors = ['webkit', 'moz'];
     for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.requestAnimationFrame = window[vendors[needle]+'RequestAnimationFrame'];
         window.cancelAnimationFrame =
-          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+          window[vendors[needle]+'CancelAnimationFrame'] || window[vendors[needle]+'CancelRequestAnimationFrame'];
     }
 
     if (!window.requestAnimationFrame)
@@ -78,276 +78,258 @@ if(g.extendable!==false){p.extend=arguments.callee;}return p;};e.noConflict=func
 /*
  * Animations on the icons
  */
-var SlideMagic = JClass.extend({
-	defaults : {
-		animate: true,
-		primaryColor: '#000',
-		secondaryColor: '#fff',
-		font: 'HelveticaNeue-UltraLight',
-	},
+var StitchPattern = JClass.extend({
 	init : function(options, element) {
-		this.defaults.animate = !$('html').hasClass('ieLegacy');
-		this.options = $.extend(true, {}, this.defaults, options);
-		this.$el = $(element);
+		// setup variables
+		//this.options = $.extend(true, {}, this.defaults, options);
+		this.width = 936;
+		this.height = 510;
+		this.stageScale = 0.782;
+		this.scale = 19.956;
+		this.buildFormStarted = false;
+		this.origin = {
+			x: 0,
+			y: 0
+		}
 
-		// frame rate stuff
-		this.timing = {};
-		this.timing.fps = 30;
-		this.timing.now;
-		this.timing.then = Date.now();
-		this.timing.interval = 1000/this.timing.fps;
-		this.timing.delta;
+		// prepare objects
+		this.$el = $('#stitchCanvasContainer');
+		this.stage = new Kinetic.Stage({
+			container: this.$el.attr('id'),
+			width: this.width,
+			height: this.height,
+			scale: this.stageScale,
+			draggable: false
+		});
+		this.layer = new Kinetic.Layer();
+		this.stitches = [];
 
-		// setup context and animation variables
-		this.options.ctx = this.$el[0].getContext("2d");
-		this.resize();
-		this.pause = false;
-		this.animating = false;
-
-		// attach events
+		// build environment
+		this.build();
 		this.bindEvents();
-			
-		// animation stuff
-		if(this.setup) this.setup();
-		(this.options.animate) ? this.frame = 0 : this.frame = this.totalFrames;
-		this.initalRender = true;
-		this.render();
-		this.initalRender = false;
 		
 		return element;
 	},
 	bindEvents : function() {
-		this.$el.bind('startAnimation', {context: this}, function(event) {
-			event.data.context.beginAnimation();
+		var elem = this;
+		$(this.stage.content).on('mousewheel', function(event) {
+	        event.preventDefault();
+			elem.zoom(event);
 		});
-		$(window).bind('pauseAnimation', {context: this}, function(event) {
-			event.data.context.pauseAnimation();
+		$('form#stitchpattern').bind('submit', function(e) {
+			if(elem.buildFormStarted) return true;
+			else return elem.buildForm(e);
 		});
-		$(window).bind('resetAnimation', {context: this}, function(event) {
-			event.data.context.reset();
-		});
-		$(window).bind('resize', {context: this}, function(event) {
-			event.data.context.resize();
-		});
-		this.$el.bind('animationRedrawLastFrame', {context: this}, function(event) {
-			event.data.context.redraw();
+		$('#imageLoader').bind('change', function(e) {
+			elem.loadFromImage(e.target.files[0]);
 		});
 
-		// respond to mouse / touch events
-		this.$el.bind('mousemove.hover', {context: this}, function(event) {
-			event.data.context.hover(event);
+		/* support drag and drop */
+		this.$el.on('dragenter', function (e) 
+		{
+		    e.stopPropagation();
+		    e.preventDefault();
+		    $(this).css('border', '2px solid #0B85A1');
 		});
-		if(this.click != undefined) {
-			this.$el.bind('click', {context: this}, function(event) {
-				event.data.context.click(event);
-			});	
-			this.$el.bind('touchend', {context: this}, function(event) {
-				event.data.context.click(event);
-			});
-		}
+		this.$el.on('dragover', function (e) 
+		{
+		     e.stopPropagation();
+		     e.preventDefault();
+		});
+		this.$el.on('drop', function (e) 
+		{
+		     $(this).css('border', '2px dotted #0B85A1');
+		     e.preventDefault();
+		     var files = e.originalEvent.dataTransfer.files;
+		 
+		     elem.loadFromImage(files[0]);
+		});
 	},
-	hover : function(e) {
-		if(this.hotspots != undefined && !this.animating) {
-			(this.findTarget(event.pageX, 0, event.pageY, this.$el[0].offsetTop) > -1) ? 
-				this.$el.css('cursor','pointer') :
-				this.$el.css('cursor','default');
-		}
-	},
-	findTarget : function(pointX, offsetX, pointY, offsetY) {
-		// these animations are predominently centered in the page so we need to take the X coord from the offset of the center
-		pointX = (this.$el.width()/2) - (($(window).width()/2) - pointX);
+	loadFromImage : function(file) {
+        elem = this;
+	    var reader = new FileReader();
+	    reader.onload = function(event){
+	        var img = new Image();
+	        img.onload = function(){
+				var canvas = document.createElement( 'canvas' );
+				canvas.width = 60;
+				canvas.height = 150;
+				var ctx = canvas.getContext( '2d' );
+				var imgwidth = canvas.width, imgheight = Math.round(canvas.width * img.height / img.width);
+	            
+	            ctx.drawImage(img,0,0);
+				document.body.appendChild(canvas);
+	            
+	            // Get the CanvasPixelArray so we can iterate it
+				var pix = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+				
+				// Loop over each pixel and invert the color.
+				var str = '';
+				for (var i = 0, n = pix.length; i < n; i += 4) {
+					(pix[i] < 100 && pix[i+1] < 100 && pix[i+2] < 100) ? str += '1' : str += '0';
+				}
 
-		for(var spot = 0; spot < this.hotspots.length; spot++) {
-            if(pointX < this.hotspots[spot].centerx + this.hotspots[spot].distance + offsetX 
-            && pointX > this.hotspots[spot].centerx - this.hotspots[spot].distance + offsetX 
-            && pointY < this.hotspots[spot].centery + this.hotspots[spot].distance + offsetY 
-            && pointY > this.hotspots[spot].centery - this.hotspots[spot].distance + offsetY) {
-            	this.target = spot;
-				return this.target;
-            }
-        }
-        this.target = -1;
-        return this.target;
-	},
-	resize : function() {
-		if($(window).width() <= 400) {
-			this.$el.width($(window).width()*0.5).height($(window).width()*0.5);
-		} else if(this.$el.width() < 290) {
-			this.$el.removeAttr('style');
-		}
-		if(!this.options.animate) { 
-			this.frame = this.totalFrames;
-		}
-		this.animate();
-	},
-	reset : function() {
-		// only reset if we reached the end of the animation
-		if(this.totalFrames - this.frame < 10) {
-			this.frame = 0;
-			this.pause = false;
-			this.render();
-		}
-	},
-	render : function() {
-		this.draw();
-		this.drawFrame();
-	},
-	beginAnimation : function() {
-		this.pause = false;
-		this.animating = true;
-		this.configure();
-		if(!this.options.animate) this.frame = this.totalFrames;
-		this.animate();
-	},
-	animate : function() {
-	    this.timing.now = Date.now();
-	    this.timing.delta = this.timing.now - this.timing.then;
-     
-	    if (this.timing.delta > this.timing.interval) {
- 			this.frame++;
- 			this.timing.then = this.timing.now - (this.timing.delta % this.timing.interval);
- 			if(this.options.buildReverse) {
-				this.drawFrame();
-		 		this.draw();
-			} else {
-		 		this.draw();
-				this.drawFrame();
-			}
-		}
-		this.trigger();
-	},
-	redraw : function() {
-		if(!this.animating) {
-			if(this.options.buildReverse) {
-				this.drawFrame();
-				this.draw();
-			} else {
-				this.draw();
-				this.drawFrame();
-			}
-		}
-	},
-	pauseAnimation : function() {
-		this.pause = true;
-	},
-	easeIn : function(startingOffset, thisFrame, totalFrames, totalDifference, velocity) {
-		var t = thisFrame, b = startingOffset, c = totalDifference, d = totalFrames, v = velocity;
-		return c * (( t = t / d - 1) * t * ((v + 1) * t + v) + 1) + b;
-	},
-	easeOutQuad : function(t, b, c, d) {
-		t /= d;
-		return -c * t*(t-2) + b;
-	},
-	trigger : function() {
-		if(this.pause) return;
-
-		if (this.frame < this.totalFrames) {
-			var elem = this;
-			//setTimeout(function() {
-				requestAnimationFrame(elem.animate.bind(elem));
-			//}, 1000 / 30);
-		} else {
-			this.animating = false;
-		}
-	},
-	wrapText : function(text, x, y, maxWidth, lineHeight, fontSize) {
-		var ctx = this.options.ctx, words = [];
-		// to take an accurate measurement we need the context font setup correctly
-		ctx.font=fontSize+"px "+this.options.font;
-
-		if(typeof text === 'string')
-			words.push(text.split(' '));
-		else if(typeof text === 'object') {
-			// an array will always line break at the end of each array element
-			for(var w = 0; w < text.length; w++)
-				if(text[w] != null && text[w] != '')
-					words.push(text[w].split(' '));
-		}
-
-        var line = '', lines = [], totalHeight = -(fontSize*0.5), tail = false, leftover = Math.floor(ctx.measureText(' ').width/2), workingLineHeight = lineHeight*fontSize, testLine, metrics, testWidth;
-
-        for(var w = 0; w < words.length; w++) {
-	        for(var n = 0; n < words[w].length; n++) {
-	          testLine = line + words[w][n] + ' ';
-	          testWidth = ctx.measureText(testLine).width;
-	          
-	         	// if we've met the limit, push the buffer
-	        	if (testWidth > maxWidth) {
-	        		// push the shorter line if it's not empty
-	        		if(line != '') {
-						if(lines.length > 0) {
-							y += workingLineHeight;
-							totalHeight += workingLineHeight;
-						}
-	        			lines.push(new Array(line, x+leftover, y, fontSize, workingLineHeight));
-	        			workingLineHeight = lineHeight*fontSize;
-					}
-
-					// if the single word was too long, push that as well
-					var wordWidth = ctx.measureText(words[w][n]+' ').width;
-					if(wordWidth > maxWidth) {
-						// scale the font so it fits
-						var newFS = Math.floor(fontSize*(maxWidth/wordWidth));
-		        		workingLineHeight = lineHeight*(fontSize);
-						
-						if(lines.length > 0) {
-							y += workingLineHeight;
-							totalHeight += workingLineHeight;
-						}
-		        		lines.push(new Array(words[w][n]+' ', x+leftover, y, newFS, workingLineHeight));
-		        		line = '';
-		        		workingLineHeight = lineHeight*(fontSize);
-		        		tail = false;
-		        	} 
-		        	// otherwise build the buffer
-		        	else {
-		        		line = words[w][n]+' ';
-		        		tail = true;
-		        	}
-	        	} 
-	        	// otherwise build the buffer
-	        	else {
-	        		line = testLine;
-	        		tail = true;
-	        	}
+				$('input[name=stitches]').val(str);
+				elem.build();
+				elem.$el.css('border', '');
 	        }
-	        if(tail) {
-	        	if(lines.length > 0) {
-			        y += workingLineHeight;
-			        totalHeight += workingLineHeight;
-			    }
-		        lines.push(new Array(line, x+leftover, y, fontSize, workingLineHeight));
-		        workingLineHeight = lineHeight*fontSize;
-	        	line = '';
-        	}
-        }
-        
-        // amend vertical offset based on number of lines we have to output
-        for(var x = 0; x < lines.length; x++) {
-        	lines[x][2] = Math.floor(lines[x][2]-(totalHeight/2));
-		}
-
-        return lines;
+	        img.src = event.target.result;
+	    }
+	    reader.readAsDataURL(file);
 	},
-	cacheText : function(lines,size) {
-		var canvas = document.createElement( 'canvas' );
-		canvas.width = size;
-		canvas.height = size;
+	buildForm : function(e) {
+		if(!this.buildFormStarted) {
+			this.buildFormStarted = true;
 
-		var ctx = canvas.getContext( '2d' );
-		ctx.textAlign = 'center';
-	    ctx.fillStyle = this.options.primaryColor;
-
-		for(var w = 0; w < lines.length; w++) {
-			ctx.font=lines[w][3]+"px "+this.options.font;
-			ctx.fillText(lines[w][0], (size/2)+lines[w][1], (size/2)+lines[w][2]);
+			var maxrows = 150, maxneedles = 60, data = '';
+			for(var row = 0; row < maxrows; row++) {
+				for(var needle = 0; needle < maxneedles; needle++) {
+					(this.stitches[row][needle].poly.getFill() == 'white') ?
+						data += '0':
+						data += '1';
+				}
+			}
+			$('input[name=stitches]').val(data);
+			this.stage.toImage({
+				callback : function(call) {
+					//console.log('submitting...');
+					$('input[name=preview]').val(call.src);
+					$('input[type=submit]').trigger('click');
+				}
+			});
+			return false;
 		}
-	
-		return canvas;
+	},
+	zoom : function(event) {
+        var evt = event.originalEvent,
+            mx = evt.clientX,
+            my = evt.clientY,
+            wheel = evt.wheelDelta / 120; //n or -n
+        var zoom = (1.1 - (evt.wheelDelta < 0 ? 0.2 : 0));
+        var newscale = this.stageScale * zoom;
+        
+        if(newscale > 0.3 && newscale < 2) {
+	        this.origin.x = mx / this.stageScale + this.origin.x - mx / newscale;
+	        this.origin.y = my / this.stageScale + this.origin.y - my / newscale;
+	        this.stage.setOffset(this.origin.x, this.origin.y);
+	        this.stage.setScale(newscale);
+	        this.stage.draw();
+	        this.stageScale *= zoom;
+        }
+	},
+	build : function() {
+		var maxrows = 150, 
+			maxneedles = 60,
+			height = this.scale*0.7, 
+			voffset = 0-(maxrows*height)+this.height+110, 
+			angle = this.scale*0.32,
+			stitches = ($('input[name=stitches]').val() != undefined) ? $('input[name=stitches]').val() : null,
+			count = 0;
+
+		this.stage.destroyChildren();
+		for(var row = 0; row < maxrows; row++) {
+			this.stitches[row] = [];
+
+			for(var needle = 0; needle < maxneedles; needle++) {
+				this.stitches[row][needle] = {};
+
+				this.stitches[row][needle].poly = new Kinetic.Polygon({
+					points: [
+						(needle*this.scale), 					voffset + height,
+						((needle*this.scale) + (this.scale/2)), voffset + height + angle,
+						(needle*this.scale) + this.scale, 		voffset + height,
+						(needle*this.scale) + this.scale, 		voffset,
+						(needle*this.scale) + (this.scale/2),	voffset + angle,
+						(needle*this.scale),					voffset
+					],
+					fill: (stitches != null && stitches.charAt(count) == 0) ? 'white' : 'black',
+					stroke: 'black',
+					strokeWidth: 0.2
+				});
+				this.stitches[row][needle].poly.row = row;
+				this.stitches[row][needle].poly.needle = needle;
+
+				// attach events
+				var elem = this;
+				this.stitches[row][needle].poly.on('mousedown', function(e) {
+					if(this.getFill() == 'white' && !elem.paint) {
+						this.setFill('black');
+						this.draw();
+					} else {
+						this.setFill('white');
+						this.setStroke('white');
+						this.draw();
+						this.setStroke('black');
+						this.draw();
+					}
+					elem.paint = true;
+				});
+				this.stitches[row][needle].poly.on('mousemove', function(e) {
+					if(elem.paint) {
+						this.setFill('black');
+						this.draw();
+					}
+				});
+				$(document).bind('mouseup', function(e) {
+					elem.paint = false;
+				});
+		
+				// add the shape to the layer
+				this.layer.add(this.stitches[row][needle].poly);
+				count++;
+			}
+			voffset = voffset+height;
+		}
+		
+		this.layer.on('mouseenter', function() {
+			elem.stage.setDraggable(false);
+		});	
+		this.layer.on('mouseleave', function() {
+			elem.stage.setDraggable(true);
+		});
+
+		
+		// draw the guidelines
+		voffset = 0-(maxrows*height)+this.height+115;
+		for(var needle = 5; needle < maxneedles; needle=needle+5) {
+			var hr = new Kinetic.Line({
+				points: [
+					(needle*this.scale), voffset,
+					(needle*this.scale), voffset+(height*maxrows)+10,
+				],
+				stroke: 'black',
+				strokeWidth: 0.6
+			});
+
+			var labelTop = new Kinetic.Text({
+				x: (needle*this.scale),
+				y: voffset - 20,
+				text: needle,
+				fontSize: 20,
+				fontFamily: 'Calibri',
+				fill: 'black'
+			});
+
+			var labelBottom = new Kinetic.Text({
+				x: (needle*this.scale), 
+				y: voffset+(height*maxrows)+10,
+				text: needle,
+				fontSize: 20,
+				fontFamily: 'Helvetica',
+				fill: 'black'
+			});
+
+			this.layer.add(hr);
+			this.layer.add(labelTop);
+			this.layer.add(labelBottom);
+		}
+				
+		// add the layer to the stage
+		this.stage.add(this.layer);
 	}
 });
 
-var SlideMagicSpiral = SlideMagic.extend({
+var FancyStitch = StitchPattern.extend({
 	defaults : {
 		a: 2,
 		b: 22.2,
@@ -359,8 +341,6 @@ var SlideMagicSpiral = SlideMagic.extend({
 	click : function(e) {
 		e.stopPropagation();
 		e.preventDefault();
-
-		console.log('trigger!');
 	},
 	configure : function() {
 		this.totalFrames = 145;
@@ -404,14 +384,10 @@ var SlideMagicSpiral = SlideMagic.extend({
 	}
 });
 
-// setup drawing objects as jquery plugins
-$.plugin('SlideMagicSpiral', SlideMagicSpiral);
 
 /*
  * Initialization code
  */
-$(window).load(function() {
-	var options = {animate: !$('html').hasClass('ieLegacy')};
-	$('canvas').SlideMagicSpiral($.extend({},options,{}));
-	//$('canvas').trigger('startAnimation');
+$(document).ready(function() {
+	var stitch = new StitchPattern;
 });

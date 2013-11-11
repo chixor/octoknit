@@ -1,0 +1,27 @@
+On Sun, Feb 24, 2008 at 2:48 PM, M H Stein 
+<dm561-0l1pH2CMacvR7s880joybQ@xxxxxxxxxxxxxxxx> wrote:
+> Didn't at least one of the drives actually come from Brother's knitting
+> machines?
+>
+> m
+
+Tandy licensed the TPDD-1 design from Brother. Brother's version is
+the FB-100. Set for 9600baud, a Tandy TPDD-1 behaves identically to a
+Brother FB-100.
+
+The FB-100 (and the TPDD-1) actually implements two protocols: the FDC
+mode (sector based) and a File-based mode. TEENY, TS-DOS use the
+file-based mode. So does the WP-2. The knitting machines and various
+pattern editing computers for the same knitting machines use the FDC
+mode. Note that they do not use the same kind of cable that we do (the
+TPDD cables have electronics built in to do line level conversions
+leeching power from the flow control lines).
+
+Now, the TPDD-2 does not implement the FDC mode. Instead it has only
+the file-access protocol, with a couple of additional commands for
+selecting tracks and raw read/write to disk sectors. The TPDD-2 could
+therefore never be used with a Brother knitting machine unless you
+replaced its ROM program.
+
+-- John.
+

@@ -1,0 +1,59 @@
+# Copyright 2010  Steve Conklin 
+# steve at conklinhouse dot com
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+
+
+Book says max save of "approximately 13,600 stitches"
+This is about 1700 bytes
+2048 - 1700 = 348
+
+Service manual says "KL116 Knit Reader may be used"
+
+---
+using base of base
+
+file01 - after memory clear and power cycle
+
+file02 - after saving 10x10 pattern 901
+      each row = 1.5 bytes
+      pattern length = 15 bytes
+      memo length = 5 bytes
+      total memory = 20 bytes
+0x20 (32)
+
+file03 - after saving 12x12 pattern to 902
+       each row = 1.5 bytes
+       pattern length = 18 bytes
+       memo length = 6 bytes
+       total memory = 24 bytes
+0x34 (52)
+
+file04 - after saving 16x16 pattern to 903
+       each row = 2 bytes
+       pattern length = 32 bytes
+       memo length = 8 bytes
+       total memory = 40 bytes
+0x4C (76)
+
+file05 - after deleting pattern 902
+
+file06 - after saving 20x20 pattern to 902
+
+
+
+
+

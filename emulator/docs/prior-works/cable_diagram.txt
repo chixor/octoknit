@@ -1,0 +1,62 @@
+Pinout for straight through PC to Brother FDD cable.
+
+Can also be used to connect a PC to a Brother 930 knitting machine,
+but either a null modem adapter needs to be added in or the
+TX and RX lines must be crossed when building this cable.
+
+As far as wiring, this should be equivalent to a DAK cable + null
+modem adapter. However, there is a possibility there are some
+electronics in the DAK cable, just like there is in the TRS-80
+TPDD-1 cable.
+
+
+                                                  1  1  1  1
+                        1  2  3  4  5  6  7  8  9  0  1  2  3
++-+-+-+-+            __________________________________________
+|1|2|3|4|            \  o  o  o  o  o  o  o  o  o  o  o  o  o /
++-+-+-+-|             \                                      / 
+|5|6|7|8|              \ o  o  o  o  o  o  o  o  o  o  o  o /
++-+-+-+-+               \__________________________________/
+  |___|                  1  1  1  1  1  1  2  2  2  2  2  2 
+                          4  5  6  7  8  9  0  1  2  3  4  5
+
+
+8-pin terminal connector
+
+Pins are numbered as if you were looking at exposed portion of
+a connector at the ends of a Brother FB-100 floppy drive
+cable. The DB-25 end is intended to hook to a PC (DTE). The 8-pin
+end connects to a FB-100 wired as DCE. Keep in mind that a the km
+is wired as DTE. If you want to connect a PC directly to a KM,
+you'll need to cross for null modem (DTE<->DTE) or use an 
+off-the-shelf null modem.
+
+Connections:
+
+8-pin    25-pin
+-----    ------------
+1        N-C
+2        3
+3        5
+4        4
+5        2
+7        6
+8        7
+N-C      1,8-19,21-25
+
+If building your own, you may want to look up the RS232 specs on
+the web and make the serial port end a DB-9. Most PCs and
+USB<->RS232 adapters use DB-9 connectors, not DB-25.
+
+I have a working cable, so I have not tried to build one myself.
+I'm interested in whether anyone has success with it.
+
+Please send questions/corrections/feedback and success/failure
+stories to jhoger@pobox.com
+
+-- John R. Hogerhuis, 11/30/04
+   Copyright (C) 2004, All Rights Reserved.
+   
+This document is licensed under the
+Creative Commons Attribution-ShareAlike License
+http://creativecommons.org/licenses/by-sa/2.0/

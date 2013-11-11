@@ -1,0 +1,53 @@
+      _____
+      |   |
+______|___|______
+|   |   |   |   |
+| 7 | 5 | 3 | 1 |
+|___|___|___|___|
+|   |   |   |   |
+| 8 | 6 | 4 | 2 |
+|___|___|___|___|
+
+View into Disk Drive Connector
+
+1 - Ground
+2 - CTS (In)
+3 - DTR (Out)
+4 - RTS (Out)
+5 - DSR (In)
+6 - TXD (Out)
+7 - RXD (In)
+8 - N/C
+
+=========================================================
+FTDI Friend -
+Notes:
+  1. - use progrmming tool to invert all signals
+  2. - cut and rejumper pads for Signal Logic Level = +5V
+
+1 - Blk - Gnd
+2 - Brn - In  - CTS
+3 - Red - Out - VCC
+4 - Ora - Out - TXD
+5 - Yel - In  - RXD
+6 - Grn - Out - RTS
+
+
+========================================================
+Connections:
+
+Drive             FTDI Friend
+Gnd    1 --------  1 Gnd
+CTS    2 ---.----- 6 RTS
+DSR    5 --/
+RTS    4 --------- 2 CTS
+TXD    6 --------- 5 RXD
+RXD    7 --------- 4 TXD
+
+============================================
+Thre's no response after a command to change to FDC mode,
+so you need to wait at least 9 mS for the RTS line on the
+drive to respond before sending more characters.
+
+====================================
+

@@ -15,10 +15,19 @@
              'type' => 'Hidden',
          ));
          $this->add(array(
+             'name' => 'stitches',
+             'type' => 'Hidden',
+         ));
+         $this->add(array(
+             'name' => 'preview',
+             'type' => 'Hidden',
+         ));
+         $this->add(array(
              'name' => 'title',
              'type' => 'Text',
-             'options' => array(
-                 'label' => 'Title',
+             'attributes' => array(
+                 'placeholder' => 'Title',
+                 'class' => 'form-control'
              ),
          ));
          $this->add(array(
@@ -26,6 +35,7 @@
              'type' => 'Submit',
              'attributes' => array(
                  'value' => 'Go',
+                 'class' => 'btn btn-primary',
                  'id' => 'submitbutton',
              ),
          ));

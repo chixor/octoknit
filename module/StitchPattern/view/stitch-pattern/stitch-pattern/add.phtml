@@ -1,3 +1,5 @@
+<div class="container container-page">
+
 <?php
  $title = $this->translate('Add new stitch pattern');
  $this->headTitle($title);
@@ -13,8 +15,21 @@
  echo $this->formRow($form->get('title'));
  echo $this->formSubmit($form->get('submit'));
  echo $this->form()->closeTag();
-*/
 
  echo $this->form()->openTag($form);
  echo $this->formCollection($form);
  echo $this->form()->closeTag();
+ * */
+?>
+<!--
+<input type="file" id="imageLoader" name="imageLoader"/> -->
+<p><span class="glyphicon glyphicon-ok-sign"></span> <?=$this->translate('Protip: you can drag and drop an image file onto the grid below.');?></p>
+<div id="stitchCanvasContainer"></div>
+<?php
+ echo $this->form()->openTag($form);
+ echo $this->formCollection($form);
+ echo $this->form()->closeTag();
+?>
+<script type="text/javascript" src="/js/kinetic-v4.7.4.min.js"></script>
+<script type="text/javascript" src="/js/customUtils.js"></script>
+</div>

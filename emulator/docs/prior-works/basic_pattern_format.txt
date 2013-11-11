@@ -1,0 +1,71 @@
+KH930 PPD/FDD pattern format
+
+There are many things saved in the two physical sectors written when a pattern
+is saved. What I am describing at this point is limited to a single row of
+pattern data.
+
+For this test I created a 200 stitch, one row pattern. A 200 stitch, one-row
+pattern is 25 bytes of "on-off" data. It can be represented as a hexadecimal
+string as follows:
+
+01 22 01 12 03 45 53 44
+53 67 88 67 78 69 AB B9
+AA B9 CD EE CD DE CF 01
+1F
+
+On the km display it looks like off-off-off-off-off-off-off-on- (01), etc., all
+the way out to off-off-off-on-on-on-on-on at the end (1F).
+
+I entered this pattern in at the keypad and saved the pattern to the first
+track of a floppy. Then I read this track information off of the disk and saved
+it into a file.
+
+By comparing this file to one with another pattern in it, I was able to detect
+the location of the pattern. For a one-row pattern, the pattern is repeated
+twice, once starting at an offset of 0x06e6 and the second starting at an
+offset of 0x0716.
+
+The data is as follows:
+
+f8 00 f3 80 b3 7b b3 77
+55 9d d5 9d 1e 96 11 e6
+ca e6 ca 22 c0 a2 80 48
+80 44
+
+As you can see there is one "extra" byte of data here, which is due to
+word-alignment.
+
+It turns out that by reversing the bit order of the saved pattern we get a lot
+closer to the pattern I gave orignally:
+
+22 01 12 01 45 03 44 53
+67 53 67 88 69 78 b9 ab
+b9 aa ee cd de cd 01 cf
+00 1f
+
+To get the orginal pattern, just consider the pattern as an array of 16-bit
+words, and swap the high and low bytes to get:
+
+01 22   01 12   03 45   53 44
+53 67   88 67   78 69   ab b9
+aa b9   cd ee   cd de   cf 01
+1f 00
+
+Which is the same as the entered pattern, assuming we ignore the 00 tacked on
+to the end to pad the last word.
+
+So, we can think of each pattern row as an array of 13 16-bit words, with the
+rightmost stitches appearing at the start of the pattern, and the leftmost
+stitches at the end.  Within each 16-bit word, the rightmost stitches appear in
+the low byte, and the leftmost stitches appear in the high byte. Within each
+byte, the leftmost stitches appear in the low nibble, and the rightmost
+stitches appear in the high nibble. Within each nibble, the stitches appear
+with the least significant bit representing the leftmost stitch, and the most
+significant bit representing the rightmost stitch.
+
+-- John.
+
+Copyright (C) 2004 John R. Hogerhuis, All Rights Reserved.
+This document is licensed under the
+Creative Commons Attribution-ShareAlike License
+http://creativecommons.org/licenses/by-sa/2.0/
