@@ -26,6 +26,7 @@ class StitchPatternController extends AbstractActionController {
 	public function addAction() {
 		$form = new StitchPatternForm();
 		$form -> get('submit') -> setValue('Add');
+		$form -> get('shared') -> setValue('0');
 
 		$request = $this -> getRequest();
 		if ($request -> isPost()) {
@@ -90,7 +91,7 @@ class StitchPatternController extends AbstractActionController {
 			return $this -> redirect() -> toRoute('home');
 		}
 
-		return array('id' => $id, 'stitchpattern' => $this -> getStitchPatternTable() -> getStitchPattern($id));
+		return array('id' => $stitchpattern->id, 'stitchpattern' => $this -> getStitchPatternTable() -> getStitchPattern($stitchpattern->id));
 	}
 
 	public function convertAction() {

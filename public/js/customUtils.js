@@ -124,7 +124,7 @@ var StitchPattern = JClass.extend({
 			elem.loadFromImage(e.target.files[0]);
 		});
 
-		/* support drag and drop */
+		/* support drag and drop 
 		this.$el.on('dragenter', function (e) 
 		{
 		    e.stopPropagation();
@@ -144,6 +144,7 @@ var StitchPattern = JClass.extend({
 		 
 		     elem.loadFromImage(files[0]);
 		});
+		*/
 	},
 	loadFromImage : function(file) {
         elem = this;
@@ -281,12 +282,14 @@ var StitchPattern = JClass.extend({
 			voffset = voffset+height;
 		}
 		
+		/*
 		this.layer.on('mouseenter', function() {
 			elem.stage.setDraggable(false);
 		});	
 		this.layer.on('mouseleave', function() {
 			elem.stage.setDraggable(true);
 		});
+		*/
 
 		
 		// draw the guidelines
