@@ -11,6 +11,7 @@
      public $title;
      public $preview;
 	 public $stitches;
+	 public $shared;
      protected $inputFilter;
 
      public function exchangeArray($data)
@@ -19,6 +20,8 @@
          $this->title  = (!empty($data['title'])) ? $data['title'] : null;
          $this->preview  = (!empty($data['preview'])) ? $data['preview'] : null;
          $this->stitches  = (!empty($data['stitches'])) ? $data['stitches'] : null;
+         $this->user_id  = (!empty($data['user_id'])) ? $data['user_id'] : null;
+         $this->shared  = (!empty($data['shared'])) ? $data['shared'] : null;
      }
 
      public function getArrayCopy()

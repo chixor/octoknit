@@ -2,45 +2,25 @@
 	$title = $this->translate('My Stitch Patterns');
 	$this->headTitle($title);
 ?>
-<?php if(!$this->zfcUserIdentity()) { ?>
 <div class="jumbotron">
 	<div class="container">
 		<h1><?= $this->translate('Machine knitting made easier'); ?></h1>
 		<p><?= $this->translate('Design your own stitch patterns and turn them into beautiful knits with your'); ?> <a href=""><?=$this->translate('Brother 950i');?></a>.</p>
-		<a class="btn btn-primary btn-lg" href="/user/register">
+		<a class="btn btn-primary btn-lg" href="/signup">
 			<?=$this->translate('Get started');?> »
 		</a>
 	</div>
 </div>
 <div class="container">
-	<h2><?=$this->translate('Public Patterns');?></h2>
-<?php } else { ?>
-<div class="container container-items">
-	<a class="btn btn-primary" href="<?php echo $this->url('stitchpattern', array('action'=>'add'));?>">
-	<span class="glyphicon glyphicon-plus"></span>
-	<?= $this->translate('New Pattern'); ?></a>
-<?php } ?>
+<h2><?=$this->translate('Public Patterns');?></h2>
 
-<section class="list <?php if(!$this->zfcUserIdentity()) echo 'public '; ?>cf">
+<section class="list public cf">
 <?php foreach ($stitchpatterns as $key=>$stitchpattern) { ?>
 	<article>
 		<div>
 			<img src="<?php echo $this->escapeHtml($stitchpattern->preview);?>"/>
 			<h4><?php echo $this->escapeHtml($stitchpattern->title);?></h4>
-			<?php if($this->zfcUserIdentity()) { ?>
-				<a class="btn btn-default btn-xs" href="<?php echo $this->url('stitchpattern',
-					array('action'=>'edit', 'id' => $stitchpattern->id));?>">
-					<span class="glyphicon glyphicon-pencil"></span>
-				</a>
-				<a class="btn btn-danger btn-xs" href="<?php echo $this->url('stitchpattern',
-					array('action'=>'delete', 'id' => $stitchpattern->id));?>">
-					<span class="glyphicon glyphicon-remove"></span>
-				</a>
-				<a class="btn btn-primary btn-xs" href="<?php echo $this->url('stitchpattern',
-					array('action'=>'share', 'id' => $stitchpattern->id));?>">
-					<span class="glyphicon glyphicon-share-alt"></span>
-				</a>
-			<?php } ?>
+
 			<a class="btn btn-success btn-xs" href="<?php echo $this->url('stitchpattern',
 				array('action'=>'convert', 'id' => $stitchpattern->id));?>">
 				<?= $this->translate('Knit it'); ?> »

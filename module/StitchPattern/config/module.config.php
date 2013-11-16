@@ -2,7 +2,7 @@
  return array(
      'controllers' => array(
          'invokables' => array(
-             'StitchPattern\Controller\StitchPattern' => 'StitchPattern\Controller\StitchPatternController',
+             'StitchPattern\Controller' => 'StitchPattern\Controller\StitchPatternController',
          ),
      ),
      'router' => array(
@@ -16,7 +16,7 @@
                          'id'     => '[0-9]+',
                      ),
                      'defaults' => array(
-                         'controller' => 'StitchPattern\Controller\StitchPattern',
+                         'controller' => 'StitchPattern\Controller',
                          'action'     => 'index',
                      ),
                  ),
@@ -28,4 +28,30 @@
              'stitchpattern' => __DIR__ . '/../view',
          ),
      ),
+    // extend the default ACL view helper to include stitch pattern level perms
+    'view_helpers' => array(
+        'factories' => array(
+            'isAllowed' => function($sm) {
+              $sm = $sm->getServiceLocator(); // $sm was the view helper's locator
+              $auth = $sm->get('Zend\Authentication\AuthenticationService');
+              $acl = $sm->get('acl');
+
+              $helper = new \StitchPattern\View\Helper\IsAllowed($auth, $acl);
+              return $helper;
+            }
+        ),
+    ),
+    // extend the default ACL controller plugin to include stitch pattern level perms
+    'controller_plugins' => array(
+        'factories' => array(
+            'isAllowed' => function($sm) {
+              $sm = $sm->getServiceLocator(); // $sm was the view helper's locator
+              $auth = $sm->get('Zend\Authentication\AuthenticationService');
+              $acl = $sm->get('acl');
+
+              $plugin = new \StitchPattern\Controller\Plugin\IsAllowed($auth, $acl);
+              return $plugin;
+            }
+        ),
+    ),
  );

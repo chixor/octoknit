@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Octoknit'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle($this->translate('Octoknit'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -32,49 +32,23 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Octoknit') ?></a>
                 </div>
-                <div class="collapse navbar-collapse">
-
-				<?php if(!$this->zfcUserIdentity()): ?>
-				<?php //echo $this->zfcUserLoginWidget(array('redirect'=>'application')); ?>
-				<form class="navbar-form navbar-right" role="login" action="/user/login" method="post">
-				  <div class="form-group">
-				    <input type="text" class="form-control" placeholder="email" name="identity">
-				  </div>
-				  <div class="form-group">
-				    <input type="password" class="form-control" placeholder="password" name="credential">
-				  </div>
-				  <button type="submit" class="btn btn-default">Login</button>
-				</form>
-				
-				<?php else: ?>
-				<ul class="nav navbar-nav navbar-right">
-		            <li id="fat-menu" class="dropdown">
-		              <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">
-						<?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()) ?>
-						<?php echo $this->zfcUserIdentity()->getDisplayName(); ?>
-						 <b class="caret"></b></a>
-		              <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-		              	<!--
-		                <li role="presentation"><a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Action</a></li>
-		                <li role="presentation"><a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Another action</a></li>
-		               -->
-		                <li role="presentation"><a role="menuitem" tabindex="-1" href="/user">Profile</a></li>
-		                <li role="presentation" class="divider"></li>
-		                <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/logout">Logout</a></li>
-		              </ul>
-		            </li>
-				</ul>
-
-				<?php endif?>
-                </div><!--/.nav-collapse -->
+				<?php echo $this->partial('csn-user/layout/nav-menu', array('navMenu' => true)); ?>
 
             </div>
         </nav>
+        <?php if(!$this->pageTypeList) { ?>
+        <div class="container container-page">
+       	<?php } ?>
             <?php echo $this->content; ?>
+        <?php if(!$this->pageTypeList) { ?>
+        </div>
+       	<?php } ?>
+        <div class="container">
             <hr>
             <footer>
                 <p>&copy; chixor <?php echo $this->translate('All rights reserved.') ?></p>
             </footer>
+        </div>
         <?php echo $this->inlineScript() ?>
     </body>
 </html>

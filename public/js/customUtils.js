@@ -76,7 +76,7 @@ if(l){j[h]=m[h];}else{o[h]=m[h];}}}function p(){if(!c&&this[g.ctorName]){this[g.
 if(g.extendable!==false){p.extend=arguments.callee;}return p;};e.noConflict=function(){var g=d[f];d[f]=b;return g;};d[f]=e;})(ns,nsKey);
 
 /*
- * Animations on the icons
+ * Create a user-editable grid
  */
 var StitchPattern = JClass.extend({
 	init : function(options, element) {

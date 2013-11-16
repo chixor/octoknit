@@ -15,8 +15,8 @@ return array(
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
-                        'controller' => 'StitchPattern\Controller\StitchPattern',
-                        'action'     => 'index',
+                         'controller' => 'StitchPattern\Controller',
+                         'action'     => 'index',
                     ),
                 ),
             ),
@@ -88,6 +88,10 @@ return array(
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            'signup'				  => __DIR__ . '/../view/csn-user/registration/index.phtml',
+            'csn-user/layout/nav-menu' => __DIR__ . '/../view/csn-user/layout/nav-menu.phtml',
+            'csn-user/registration/confirm-email-error' => __DIR__ . '/../view/csn-user/registration/confirm-email-error.phtml',
+            'csn-user/registration/confirm-email-change-password-error' => __DIR__ . '/../view/csn-user/registration/confirm-email-change-password-error.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

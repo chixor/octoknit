@@ -23,6 +23,40 @@ nav img {
 	color: white;
 	margin-top: 6px;
 }
+.navbar-header {
+	float: left;
+}
+.navbar-right {
+	float: right;
+	margin: 0px;
+}
+.navbar-nav .open .dropdown-menu {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	left: auto;
+	z-index: 1000;
+	float: left;
+	min-width: 160px;
+	padding: 5px 0;
+	margin: 2px 0 0;
+	font-size: 14px;
+	list-style: none;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0,0,0,0.15);
+	border-radius: 4px;
+	-webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+	box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+	background-clip: padding-box;
+}
+.navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
+	color: #333;
+}
+.navbar-inverse .navbar-nav .open .dropdown-menu>li>a:hover,
+.navbar-inverse .navbar-nav .open .dropdown-menu>li>a:active {
+	background-color: #428bca;
+}
 
 .zf-green {
     color: #68b604;
@@ -61,10 +95,12 @@ div.container a.brand {
 .cf:after {
     content: " "; /* 1 */
     display: table; /* 2 */
+   overflow: hidden;
 }
 
 .cf:after {
     clear: both;
+   overflow: hidden;
 }
 
 .jumbotron h1 {
@@ -95,13 +131,13 @@ div.container a.brand {
 }
 .list article div {
 	padding: 10px;
-background: #fff;
--webkit-border-radius: 3px;
--moz-border-radius: 3px;
-border-radius: 3px;
--webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.07);
--moz-box-shadow: 0 1px 2px rgba(0,0,0,0.07);
-box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+	background: #fff;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+	box-shadow: 0 1px 2px rgba(0,0,0,0.07);
 }
 .list img {
 	width: 100%;
@@ -117,6 +153,17 @@ box-shadow: 0 1px 2px rgba(0,0,0,0.07);
 .list.public .btn-success {
 	position: relative;
 	top: -41px;
+}
+
+pre.preview {
+	font-size: 9px;
+	overflow: scroll;
+}
+pre.preview code {
+	overflow: scroll;
+}
+.stdout {
+	font-size: 1em;
 }
 
 #stitchCanvasContainer {

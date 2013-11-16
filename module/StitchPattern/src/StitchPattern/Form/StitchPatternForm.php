@@ -15,6 +15,10 @@
              'type' => 'Hidden',
          ));
          $this->add(array(
+             'name' => 'shared',
+             'type' => 'Hidden',
+         ));
+         $this->add(array(
              'name' => 'stitches',
              'type' => 'Hidden',
          ));

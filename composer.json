@@ -10,6 +10,8 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.2.*",
-	"zf-commons/zfc-user": "dev-master"
+	"zf-commons/zfc-user": "dev-master",
+        "coolcsn/csn-user": "dev-master",
+        "coolcsn/csn-authorization": "dev-master"
     }
 }

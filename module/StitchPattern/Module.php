@@ -4,6 +4,8 @@ namespace StitchPattern;
  use StitchPattern\Model\StitchPattern;
  use StitchPattern\Model\StitchPatternTable;
  use StitchPattern\Model\EmulatorBridge;
+ use StitchPattern\Model\USBCable;
+ use StitchPattern\Model\USBCableTable;
  use Zend\Db\ResultSet\ResultSet;
  use Zend\Db\TableGateway\TableGateway;
 
@@ -37,15 +39,26 @@ class Module
                      $table = new StitchPatternTable($tableGateway);
                      return $table;
                  },
-                 'StitchPattern\Model\EmulatorBridge' =>  function($sm) {
-                     $emulator = new EmulatorBridge();
-                     return $emulator;
-                 },
                  'StitchPatternTableGateway' => function ($sm) {
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                      $resultSetPrototype = new ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new StitchPattern());
                      return new TableGateway('stitchpattern', $dbAdapter, null, $resultSetPrototype);
+                 },
+                 'StitchPattern\Model\EmulatorBridge' =>  function($sm) {
+                     $emulator = new EmulatorBridge();
+                     return $emulator;
+                 },
+                 'StitchPattern\Model\USBCableTable' =>  function($sm) {
+                     $tableGateway = $sm->get('USBCableTableGateway');
+                     $table = new USBCableTable($tableGateway);
+                     return $table;
+                 },
+                 'USBCableTableGateway' => function ($sm) {
+                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                     $resultSetPrototype = new ResultSet();
+                     $resultSetPrototype->setArrayObjectPrototype(new USBCable());
+                     return new TableGateway('usbcable', $dbAdapter, null, $resultSetPrototype);
                  },
              ),
          );

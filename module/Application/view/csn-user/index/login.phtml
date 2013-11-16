@@ -1,0 +1,31 @@
+<?php echo $this->partial('csn-user/layout/nav-menu', array('navMenu' => $this->navMenu)); ?>
+<h2>Log in</h2>
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('login'));
+$form->setAttribute('class', 'form-signin');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?><div class="form-group"><?
+echo $this->formInput($form->get('usernameOrEmail'));
+
+?></div><div class="form-group"><?
+echo $this->formInput($form->get('password'));
+
+?></div><div class="form-group"><?
+echo $this->formRow($form->get('rememberme'));
+
+?></div><div class="form-group"><?
+echo $this->formSubmit($form->get('submit'));
+?></div><?
+
+echo $this->form()->closeTag();
+?>
+<p>
+	<a href="<?php echo $this->url('registration');?>"><?php echo $this->translate('Sign up'); ?></a> |  
+	<a href="<?php echo $this->url('forgotten-password');?>"><?php echo $this->translate('Forgot your password?'); ?></a>
+</p>
+<br/>
+<?php echo '<div style="font-size: 20px; color: red;">' . $this->messages . '</div>'; ?>
+

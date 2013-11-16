@@ -35,12 +35,14 @@
          return $row;
      }
 
-     public function saveStitchPattern(StitchPattern $stitchpattern)
+     public function saveStitchPattern(StitchPattern $stitchpattern, $user_id)
      {
          $data = array(
              'title'  => $stitchpattern->title,
              'preview'  => $stitchpattern->preview,
-             'stitches'  => $stitchpattern->stitches
+             'stitches'  => $stitchpattern->stitches,
+             'user_id'  => $user_id,
+             'shared'  => $stitchpattern->shared
          );
 
          $id = (int) $stitchpattern->id;

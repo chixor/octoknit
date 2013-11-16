@@ -1,0 +1,32 @@
+<?php echo $this->partial('csn-user/layout/nav-menu', array('navMenu' => $this->navMenu)); ?>
+<h2>Edit profile</h2>
+<?php
+$form = $this->form;
+$username = $this->username;
+$email = $this->email;
+$displayname = $this->displayname;
+echo '<h3 class="zf-green">Your username: </h3><div style="margin-left: 35px;">'. $username.' </div>';
+echo '<h3 class="zf-green">Your password: </h3>';
+?>
+<div style="margin-left: 35px;">
+<a href="<?php echo $this->url('changePassword');?>"><?php echo $this->translate('Change password'); ?></a></div>
+<?php
+echo '<h3 class="zf-green">Your email: </h3><div style="margin-left: 35px;">'. $email .' ';
+?>
+<a href="<?php echo $this->url('changeEmail');?>">(<?php echo $this->translate('Change it'); ?>)</a></div>
+<?php
+echo '<hr />';
+echo '<h3 class="zf-green">Your display name: </h3><div style="margin-left: 35px;">'. $displayname.' </div>';
+$form->setAttribute('action', $this->url('editProfile'));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo '<div style="margin-left: 35px;">';
+echo $this->formRow($form->get('displayName'));
+echo '</div>';
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();
+?>
+
+<br/>
+<?php echo '<div style="font-size: 20px; color: red;">' . $this->message . '</div>'; ?>

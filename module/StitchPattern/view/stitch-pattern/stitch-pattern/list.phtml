@@ -1,0 +1,43 @@
+<?php
+	$title = $this->translate('My Stitch Patterns');
+	$this->headTitle($title);
+?>
+<div class="container container-items">
+<a class="btn btn-primary" href="<?php echo $this->url('stitchpattern', array('action'=>'add'));?>">
+<span class="glyphicon glyphicon-plus"></span>
+<?= $this->translate('New Pattern'); ?></a>
+
+<section class="list cf">
+<?php foreach ($stitchpatterns as $key=>$stitchpattern) { ?>
+	<article>
+		<div class="cf">
+			<img src="<?php echo $this->escapeHtml($stitchpattern->preview);?>"/>
+			<h4><?php echo $this->escapeHtml($stitchpattern->title);?></h4>
+
+			<?php if($this->isAllowed($stitchpattern, $this->identity(),'edit')) :?>
+			<a class="btn btn-default btn-xs" href="<?php echo $this->url('stitchpattern',
+				array('action'=>'edit', 'id' => $stitchpattern->id));?>" title="<?=$this->translate('Edit');?>">
+				<span class="glyphicon glyphicon-pencil"></span>
+			</a>
+			<?php endif; if($this->isAllowed($stitchpattern, $this->identity(),'share')) :?>
+			<a class="btn btn-<? if($stitchpattern->shared) echo 'primary'; else echo 'default'; ?> btn-xs" href="<?php echo $this->url('stitchpattern',
+				array('action'=>'share', 'id' => $stitchpattern->id));?>" title="<? if($stitchpattern->shared) echo $this->translate('Unshare'); else echo $this->translate('Share');?>">
+				<span class="glyphicon glyphicon-share-alt"></span>
+			</a>
+			<?php endif; if($this->isAllowed($stitchpattern, $this->identity(),'delete')) :?>
+			<a class="btn btn-danger btn-xs" href="<?php echo $this->url('stitchpattern',
+				array('action'=>'delete', 'id' => $stitchpattern->id));?>" title="<?=$this->translate('Delete');?>">
+				<span class="glyphicon glyphicon-remove"></span>
+			</a>
+			<? endif; ?>
+
+			<?php if($this->isAllowed($stitchpattern, $this->identity(),'convert')) :?>
+			<a class="btn btn-success btn-xs" href="<?php echo $this->url('stitchpattern',
+				array('action'=>'convert', 'id' => $stitchpattern->id));?>">
+				<?= $this->translate('Knit it'); ?> »
+			</a>
+			<? endif; ?>
+		</div>
+	</article>
+<?php } ?>
+</section>
