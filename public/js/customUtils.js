@@ -155,9 +155,9 @@ var StitchPattern = JClass.extend({
 				canvas.width = 60;
 				canvas.height = 150;
 				var ctx = canvas.getContext( '2d' );
-				var imgwidth = canvas.width, imgheight = Math.round(canvas.width * img.height / img.width);
+				var imgwidth = canvas.width, imgheight = Math.round((canvas.width * img.height / img.width) * 1.4);
 	            
-	            ctx.drawImage(img,0,0);
+	            ctx.drawImage(img, 0, canvas.height-imgheight, imgwidth, imgheight);
 				document.body.appendChild(canvas);
 	            
 	            // Get the CanvasPixelArray so we can iterate it
@@ -166,11 +166,12 @@ var StitchPattern = JClass.extend({
 				// Loop over each pixel and invert the color.
 				var str = '';
 				for (var i = 0, n = pix.length; i < n; i += 4) {
-					(pix[i] < 100 && pix[i+1] < 100 && pix[i+2] < 100) ? str += '1' : str += '0';
+					(pix[i] < 100 && pix[i+1] < 100 && pix[i+2] < 100 && pix[i+3] > 200) ? str += '1' : str += '0';
 				}
 
 				$('input[name=stitches]').val(str);
 				elem.build();
+
 				elem.$el.css('border', '');
 	        }
 	        img.src = event.target.result;
