@@ -28,12 +28,12 @@ class IsAllowed extends \CsnAuthorization\Controller\Plugin\IsAllowed {
      * @param User $identity
      * @param string $privilege
      */
-    public function __invoke(\StitchPattern\Model\StitchPattern $resource, \CsnUser\Entity\User $identity, $privilege) {
+    public function __invoke(\StitchPattern\Model\StitchPattern $resource, $identity, $privilege) {
     	$sharePrivilages = array('convert','upload','pddemulate');
 
 		if(parent::__invoke('StitchPattern\Controller',$privilege)) {
-			if($identity->getRole()->getName() == 'admin') return true;
-			else if($resource->user_id == $identity->getId()) return true;
+			if($identity && $identity->getRole()->getName() == 'admin') return true;
+			else if($identity && $resource->user_id == $identity->getId()) return true;
 			else if(in_array($privilege, $sharePrivilages) && $resource->shared) return true;
 		}
 		return false;
