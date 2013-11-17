@@ -83,7 +83,7 @@ var StitchPattern = JClass.extend({
 		// setup variables
 		//this.options = $.extend(true, {}, this.defaults, options);
 		this.width = 936;
-		this.height = 510;
+		this.height = 1690; //510;
 		this.stageScale = 0.782;
 		this.scale = 19.956;
 		this.buildFormStarted = false;
@@ -112,9 +112,11 @@ var StitchPattern = JClass.extend({
 	},
 	bindEvents : function() {
 		var elem = this;
-		$(this.stage.content).on('mousewheel', function(event) {
-	        event.preventDefault();
-			elem.zoom(event);
+		$(this.stage.content).on('mousewheel', function(e) {
+		    if (e.shiftKey) {
+		        e.preventDefault();
+				elem.zoom(e);
+			}
 		});
 		$('form#stitchpattern').bind('submit', function(e) {
 			if(elem.buildFormStarted) return true;
@@ -124,7 +126,39 @@ var StitchPattern = JClass.extend({
 			elem.loadFromImage(e.target.files[0]);
 		});
 
-		/* support drag and drop */
+		var elem = this;
+		$(document).bind('keydown', function(e) {
+		    if (e.shiftKey && e.target.type != 'text') {
+		    	console.log('yes!');
+		    	elem.beganMoveBehaviour = true;
+				elem.layer.toImage({callback: function(img) {
+					elem.cache = new Kinetic.Layer();
+					var cache = new Kinetic.Image({ 
+	                    image:  img,
+	                    width:  elem.width,
+	                    height: elem.height
+	                });
+
+		            elem.cache.destroyChildren();
+		            elem.cache.add(cache);
+					elem.layer.remove();
+					elem.stage.add(elem.cache);
+					elem.stage.setDraggable(true);
+			            
+				}, width: elem.width, height: elem.height});
+		    } 
+		});
+		$(document).bind('keyup', function(e) {
+		    if (elem.beganMoveBehaviour) {
+		    	console.log('recover');
+				elem.stage.setDraggable(false);
+				elem.cache.remove();
+				elem.cache.destroy();
+				elem.stage.add(elem.layer);
+			}
+		});
+
+		/* support drag and drop file upload */
 		this.$el.on('dragenter', function (e) 
 		{
 		    e.stopPropagation();
@@ -155,7 +189,10 @@ var StitchPattern = JClass.extend({
 				canvas.width = 60;
 				canvas.height = 150;
 				var ctx = canvas.getContext( '2d' );
-				var imgwidth = canvas.width, imgheight = Math.round((canvas.width * img.height / img.width) * 1.4);
+				var imgwidth = img.width, imgheight = img.height;
+
+				if(img.width > canvas.width)
+					imgwidth = canvas.width, imgheight = Math.round((canvas.width * img.height / img.width) * 1.4);
 	            
 	            ctx.drawImage(img, 0, canvas.height-imgheight, imgwidth, imgheight);
 				document.body.appendChild(canvas);
@@ -166,6 +203,7 @@ var StitchPattern = JClass.extend({
 				// Loop over each pixel and invert the color.
 				var str = '';
 				for (var i = 0, n = pix.length; i < n; i += 4) {
+					//console.log(pix[i]+' '+pix[i+2]+' '+pix[i+3]);
 					(pix[i] < 100 && pix[i+1] < 100 && pix[i+2] < 100 && pix[i+3] > 200) ? str += '1' : str += '0';
 				}
 
@@ -191,10 +229,21 @@ var StitchPattern = JClass.extend({
 				}
 			}
 			$('input[name=stitches]').val(data);
+			var elem = this;
 			this.stage.toImage({
-				callback : function(call) {
-					//console.log('submitting...');
-					$('input[name=preview]').val(call.src);
+				width: elem.width, heigth: elem.height,
+				callback : function(img) {
+					//crop the image
+					var canvas = document.createElement( 'canvas' );
+					canvas.width = elem.width;
+					canvas.height = 510;
+					var ctx = canvas.getContext( '2d' );
+					var imgwidth = canvas.width, imgheight = Math.round(canvas.width * img.height / img.width);
+		            
+		            ctx.drawImage(img, 0, canvas.height-imgheight, imgwidth, imgheight);
+					//document.body.appendChild(canvas);
+
+					$('input[name=preview]').val(canvas.toDataURL());
 					$('input[type=submit]').trigger('click');
 				}
 			});
@@ -222,7 +271,7 @@ var StitchPattern = JClass.extend({
 		var maxrows = 150, 
 			maxneedles = 60,
 			height = this.scale*0.7, 
-			voffset = 0-(maxrows*height)+this.height+110, 
+			voffset = 30;//-(maxrows*height)+this.height+110, 
 			angle = this.scale*0.32,
 			stitches = ($('input[name=stitches]').val() != undefined) ? $('input[name=stitches]').val() : null,
 			count = 0;
@@ -253,22 +302,26 @@ var StitchPattern = JClass.extend({
 				// attach events
 				var elem = this;
 				this.stitches[row][needle].poly.on('mousedown', function(e) {
-					if(this.getFill() == 'white' && !elem.paint) {
-						this.setFill('black');
-						this.draw();
-					} else {
-						this.setFill('white');
-						this.setStroke('white');
-						this.draw();
-						this.setStroke('black');
-						this.draw();
+				    if (!e.shiftKey) {
+						if(this.getFill() == 'white' && !elem.paint) {
+							this.setFill('black');
+							this.draw();
+						} else {
+							this.setFill('white');
+							this.setStroke('white');
+							this.draw();
+							this.setStroke('black');
+							this.draw();
+						}
+						elem.paint = true;
 					}
-					elem.paint = true;
 				});
 				this.stitches[row][needle].poly.on('mousemove', function(e) {
-					if(elem.paint) {
-						this.setFill('black');
-						this.draw();
+				    if (!e.shiftKey) {
+						if(elem.paint) {
+							this.setFill('black');
+							this.draw();
+						}
 					}
 				});
 				$(document).bind('mouseup', function(e) {
@@ -282,18 +335,8 @@ var StitchPattern = JClass.extend({
 			voffset = voffset+height;
 		}
 		
-		/*
-		this.layer.on('mouseenter', function() {
-			elem.stage.setDraggable(false);
-		});	
-		this.layer.on('mouseleave', function() {
-			elem.stage.setDraggable(true);
-		});
-		*/
-
-		
 		// draw the guidelines
-		voffset = 0-(maxrows*height)+this.height+115;
+		voffset = 30;//-(maxrows*height)+this.height+115;
 		for(var needle = 5; needle < maxneedles; needle=needle+5) {
 			var hr = new Kinetic.Line({
 				points: [
@@ -309,7 +352,7 @@ var StitchPattern = JClass.extend({
 				y: voffset - 20,
 				text: needle,
 				fontSize: 20,
-				fontFamily: 'Calibri',
+				fontFamily: 'Helvetica',
 				fill: 'black'
 			});
 

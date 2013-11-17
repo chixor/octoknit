@@ -14,12 +14,9 @@
      )
  ));
  $form->prepare();
-
 ?>
-<!--
-<input type="file" id="imageLoader" name="imageLoader"/>
--->
-<p><span class="glyphicon glyphicon-ok-sign"></span> <?=$this->translate('To draw from an image simply drag and drop the file onto the grid below.');?></p>
+<p><span class="glyphicon glyphicon-picture"></span> <b><?=$this->translate('Load an image');?></b> <?=$this->translate('drag and drop the file onto the grid below. It handles black and white images best.');?></p>
+<p><span class="glyphicon glyphicon-move"></span> <b><?=$this->translate('Zoom and pan');?></b> <?=$this->translate('hold down shift while scrolling or dragging (experimental).');?></p>
 <div id="stitchCanvasContainer"></div>
 <?php
  echo $this->form()->openTag($form);
