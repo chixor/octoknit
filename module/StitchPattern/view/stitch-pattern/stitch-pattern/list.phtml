@@ -3,12 +3,14 @@
 	$this->headTitle($title);
 ?>
 <div class="container container-items">
+<h2><?=$this->translate('My Patterns');?></h2>
+
 <a class="btn btn-primary" href="<?php echo $this->url('stitchpattern', array('action'=>'add'));?>">
 <span class="glyphicon glyphicon-plus"></span>
 <?= $this->translate('New Pattern'); ?></a>
 
 <section class="list cf">
-<?php foreach ($stitchpatterns as $key=>$stitchpattern) { ?>
+<?php $iterated = false; foreach ($mySP as $key=>$stitchpattern) {  $iterated = true;?>
 	<article>
 		<div class="cf">
 			<img src="<?php echo $this->escapeHtml($stitchpattern->preview);?>"/>
@@ -40,4 +42,32 @@
 		</div>
 	</article>
 <?php } ?>
+<?php if(!$iterated) :?>
+	<article>
+	<p><?=$this->translate('Can\'t find any! Why don\'t you add one?');?></p>
+	</article>
+<?php endif; ?>
+</section>
+
+<h2><?=$this->translate('Shared Patterns');?></h2>
+
+<section class="list public cf">
+<?php $iterated = false; foreach ($sharedSP as $key=>$stitchpattern) { $iterated = true; ?>
+	<article>
+		<div>
+			<img src="<?php echo $this->escapeHtml($stitchpattern->preview);?>"/>
+			<h4><?php echo $this->escapeHtml($stitchpattern->title);?></h4>
+
+			<a class="btn btn-success btn-xs" href="<?php echo $this->url('stitchpattern',
+				array('action'=>'convert', 'id' => $stitchpattern->id));?>">
+				<?= $this->translate('Knit it'); ?> »
+			</a>
+		</div>
+	</article>
+<?php } ?>
+<?php if(!$iterated) :?>
+	<article>
+	<p><?=$this->translate('No one else has shared their stitch patterns.');?></p>
+	</article>
+<?php endif; ?>
 </section>

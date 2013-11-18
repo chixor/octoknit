@@ -2,6 +2,7 @@
  namespace StitchPattern\Model;
 
  use Zend\Db\TableGateway\TableGateway;
+ use Zend\Db\Sql\Select;
 
  class StitchPatternTable
  {
@@ -18,9 +19,14 @@
          return $resultSet;
      }
 
-     public function fetchPublic()
+     public function fetchPublic($id = false)
      {
-         $resultSet = $this->tableGateway->select(array('shared' => true));
+     	$select = new Select('stitchpattern');
+     	 if($id)
+	         $resultSet = $select->where("user_id != $id",'shared = 1');
+		 else 
+	         $resultSet = $this->tableGateway->select(array('shared' => true));
+
          return $resultSet;
      }
 

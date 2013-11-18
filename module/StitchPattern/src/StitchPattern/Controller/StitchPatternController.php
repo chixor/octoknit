@@ -15,7 +15,10 @@ class StitchPatternController extends AbstractActionController {
 	public function indexAction() {
 		$this->layout()->setVariable('pageTypeList', true);
 		if($this->identity()) {
-			$vm = new ViewModel( array('stitchpatterns' => $this -> getStitchPatternTable() -> fetchAll($this -> identity() -> getId())));
+			$vm = new ViewModel( array(
+				'mySP' => $this -> getStitchPatternTable() -> fetchAll($this -> identity() -> getId()),
+				'sharedSP' => $this -> getStitchPatternTable() -> fetchPublic($this -> identity() -> getId())
+			));
 			$vm->setTemplate('stitch-pattern/stitch-pattern/list.phtml');
 			return $vm;
 		} else {
