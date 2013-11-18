@@ -2,7 +2,6 @@
  namespace StitchPattern\Model;
 
  use Zend\Db\TableGateway\TableGateway;
- use Zend\Db\Sql\Select;
 
  class StitchPatternTable
  {
