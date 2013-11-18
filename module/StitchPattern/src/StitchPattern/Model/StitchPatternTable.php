@@ -21,9 +21,8 @@
 
      public function fetchPublic($id = false)
      {
-     	$select = new Select('stitchpattern');
      	 if($id)
-	         $resultSet = $select->where("user_id != $id",'shared = 1');
+	         $resultSet = $this->tableGateway->select("user_id != $id and shared = 1");
 		 else 
 	         $resultSet = $this->tableGateway->select(array('shared' => true));
 
