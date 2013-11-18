@@ -43,7 +43,6 @@
      {
          $data = array(
              'title'  => $stitchpattern->title,
-             'preview'  => $stitchpattern->preview,
              'stitches'  => $stitchpattern->stitches,
              'user_id'  => $user_id,
              'shared'  => $stitchpattern->shared

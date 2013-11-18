@@ -10,6 +10,7 @@
      public $id;
      public $title;
      public $preview;
+     public $previewDir;
 	 public $stitches;
 	 public $shared;
      protected $inputFilter;
@@ -22,6 +23,10 @@
          $this->stitches  = (!empty($data['stitches'])) ? $data['stitches'] : null;
          $this->user_id  = (!empty($data['user_id'])) ? $data['user_id'] : null;
          $this->shared  = (!empty($data['shared'])) ? $data['shared'] : 0;
+
+		// prepare for file storage / retrieval
+		 $this->preview = 'data://' . substr($this->preview, 5);
+		 $this->previewDir = $this->getPreviewImageDir($this);
      }
 
      public function getArrayCopy()
@@ -97,4 +102,29 @@
 
          return $this->inputFilter;
      }
+	
+	/**
+	 * Function: sanitize
+	 * Returns a sanitized string, typically for URLs.
+	 *
+	 * Parameters:
+	 *     $string - The string to sanitize.
+	 *     $force_lowercase - Force the string to lowercase?
+	 *     $anal - If set to *true*, will remove all non-alphanumeric characters.
+	 */
+	public function sanitize($string, $force_lowercase = true, $anal = false) {
+		$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]", "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;", "â€”", "â€“", ",", "<", ".", ">", "/", "?");
+		$clean = trim(str_replace($strip, "", strip_tags($string)));
+		$clean = preg_replace('/\s+/', "-", $clean);
+		$clean = ($anal) ? preg_replace("/[^a-zA-Z0-9]/", "", $clean) : $clean;
+		return ($force_lowercase) ? (function_exists('mb_strtolower')) ? mb_strtolower($clean, 'UTF-8') : strtolower($clean) : $clean;
+	}
+
+	public function getPreviewImageDir(StitchPattern $stitchpattern) {
+		return 'data/previews/' . $stitchpattern->id . '-' . $this -> sanitize($stitchpattern->title, true, true) . '.png';
+	}
+	
+	public function savePreview() {
+		file_put_contents($this->previewDir, file_get_contents($this->preview));
+	}
  }

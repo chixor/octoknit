@@ -40,6 +40,7 @@ class StitchPatternController extends AbstractActionController {
 			if ($form -> isValid()) {
 				$stitchpattern -> exchangeArray($form -> getData());
 				$this -> getStitchPatternTable() -> saveStitchPattern($stitchpattern,$this->identity()->getId());
+				$stitchpattern -> savePreview();
 
 				// Redirect to list of stitchpatterns
 				return $this -> redirect() -> toRoute('stitchpattern');
@@ -62,6 +63,7 @@ class StitchPatternController extends AbstractActionController {
 
 			if ($form -> isValid()) {
 				$this -> getStitchPatternTable() -> saveStitchPattern($stitchpattern,$this->identity()->getId());
+				$stitchpattern -> savePreview();
 
 				// Redirect to list of stitchpatterns
 				return $this -> redirect() -> toRoute('stitchpattern');

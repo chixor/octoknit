@@ -13,7 +13,7 @@
 <?php $iterated = false; foreach ($mySP as $key=>$stitchpattern) {  $iterated = true;?>
 	<article>
 		<div class="cf">
-			<img src="<?php echo $this->escapeHtml($stitchpattern->preview);?>"/>
+			<img src="/<?php echo $this->escapeHtml($stitchpattern->previewDir);?>"/>
 			<h4><?php echo $this->escapeHtml($stitchpattern->title);?></h4>
 
 			<?php if($this->isAllowed($stitchpattern, $this->identity(),'edit')) :?>
@@ -55,7 +55,7 @@
 <?php $iterated = false; foreach ($sharedSP as $key=>$stitchpattern) { $iterated = true; ?>
 	<article>
 		<div>
-			<img src="<?php echo $this->escapeHtml($stitchpattern->preview);?>"/>
+			<img src="/<?php echo $this->escapeHtml($stitchpattern->previewDir);?>"/>
 			<h4><?php echo $this->escapeHtml($stitchpattern->title);?></h4>
 
 			<a class="btn btn-success btn-xs" href="<?php echo $this->url('stitchpattern',
