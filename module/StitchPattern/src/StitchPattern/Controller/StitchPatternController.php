@@ -89,6 +89,7 @@ class StitchPatternController extends AbstractActionController {
 			$del = $request -> getPost('del', 'No');
 
 			if ($del == 'Yes') {
+				$stitchpattern -> deletePreview();
 				$this -> getStitchPatternTable() -> deleteStitchPattern($stitchpattern->id);
 			}
 

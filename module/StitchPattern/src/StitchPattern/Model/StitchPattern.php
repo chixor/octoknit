@@ -24,9 +24,9 @@
          $this->user_id  = (!empty($data['user_id'])) ? $data['user_id'] : null;
          $this->shared  = (!empty($data['shared'])) ? $data['shared'] : 0;
 
-		// prepare for file storage / retrieval
-		 $this->preview = 'data://' . substr($this->preview, 5);
-		 $this->previewDir = $this->getPreviewImageDir($this);
+		// prepare for file storage / retrieval, remove "data:image/png;base64,"
+		$this->preview = substr($this->preview, strpos($this->preview,",")+1);
+		$this->previewDir = $this->getPreviewImageDir($this);
      }
 
      public function getArrayCopy()
@@ -125,6 +125,10 @@
 	}
 	
 	public function savePreview() {
-		file_put_contents($this->previewDir, file_get_contents($this->preview));
+		file_put_contents($this->previewDir, base64_decode($this->preview));
+	}
+	
+	public function deletePreview() {
+		@unlink($this->previewDir);
 	}
  }
