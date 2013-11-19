@@ -12,6 +12,10 @@ namespace Application;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
+use CsnUser\Entity\User; // only for the filters
+use CsnUser\Form\LoginForm;
+use CsnUser\Form\LoginFilter;
+
 class Module
 {
     public function onBootstrap(MvcEvent $e)
@@ -19,6 +23,8 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+	$eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'loginFormView'), 100);
     }
 
     public function getConfig()
@@ -35,5 +41,15 @@ class Module
                 ),
             ),
         );
+    }
+
+    public function loginFormView($event)
+    {
+        $form = new LoginForm();
+        $form->get('submit')->setValue('Login');
+        $viewModel = $event->getViewModel();
+        $viewModel->setVariables(array(
+            'loginForm' => $form
+        ));
     }
 }

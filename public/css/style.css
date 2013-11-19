@@ -145,14 +145,18 @@ div.container a.brand {
 	border: 1px solid #eee;
 }
 .list h4 {
-	padding: 12px 0;
+	padding: 12px 0 0;
+	margin-bottom: 4px;
+}
+.list time {
+	color: #999;
 }
 .list .btn-success {
 	float: right;
 }
 .list.public .btn-success {
 	position: relative;
-	top: -41px;
+	top: -30px;
 }
 
 pre.preview {

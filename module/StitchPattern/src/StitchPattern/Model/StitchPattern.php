@@ -13,6 +13,8 @@
      public $previewDir;
 	 public $stitches;
 	 public $shared;
+	 public $username;
+	 public $update_date;
      protected $inputFilter;
 
      public function exchangeArray($data)
@@ -22,6 +24,8 @@
          $this->preview  = (!empty($data['preview'])) ? $data['preview'] : null;
          $this->stitches  = (!empty($data['stitches'])) ? $data['stitches'] : null;
          $this->user_id  = (!empty($data['user_id'])) ? $data['user_id'] : null;
+         $this->username  = (!empty($data['username'])) ? $data['username'] : null;
+         $this->update_date  = (!empty($data['update_date'])) ? $data['update_date'] : null;
          $this->shared  = (!empty($data['shared'])) ? $data['shared'] : 0;
 
 		// prepare for file storage / retrieval, remove "data:image/png;base64,"

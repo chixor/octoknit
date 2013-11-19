@@ -14,16 +14,22 @@
 
      public function fetchAll($id)
      {
-         $resultSet = $this->tableGateway->select(array('user_id' => $id));
+         $resultSet = $this->tableGateway->select(function (\Zend\Db\Sql\Select $select) use ($id) {
+         	$select->join('user','stitchpattern.user_id = user.id', array('username'))->where("user.id = $id")->order('title');
+         });
          return $resultSet;
      }
 
      public function fetchPublic($id = false)
      {
      	 if($id)
-	         $resultSet = $this->tableGateway->select("user_id != $id and shared = 1");
+	         $resultSet = $this->tableGateway->select(function (\Zend\Db\Sql\Select $select) use ($id) {
+	         	$select->join('user','stitchpattern.user_id = user.id', array('username'))->where("user.id != $id and shared = 1")->order('title');
+	         });
 		 else 
-	         $resultSet = $this->tableGateway->select(array('shared' => true));
+	         $resultSet = $this->tableGateway->select(function (\Zend\Db\Sql\Select $select) {
+	         	$select->join('user','stitchpattern.user_id = user.id', array('username'))->where("shared = 1")->order('title');
+	         });
 
          return $resultSet;
      }
@@ -31,7 +37,9 @@
      public function getStitchPattern($id)
      {
          $id  = (int) $id;
-         $rowset = $this->tableGateway->select(array('id' => $id));
+         $rowset = $this->tableGateway->select(function (\Zend\Db\Sql\Select $select) use ($id) {
+         	$select->join('user','stitchpattern.user_id = user.id', array('username'))->where("stitchpattern.id = $id");
+         });
          $row = $rowset->current();
          if (!$row) {
              throw new \Exception("Could not find row $id");

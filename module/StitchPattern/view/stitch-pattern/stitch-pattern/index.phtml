@@ -14,23 +14,4 @@
 <div class="container">
 <h2><?=$this->translate('Public Patterns');?></h2>
 
-<section class="list public cf">
-<?php $iterated = false; foreach ($stitchpatterns as $key=>$stitchpattern) { $iterated = true; ?>
-	<article>
-		<div>
-			<img src="/<?php echo $this->escapeHtml($stitchpattern->previewDir);?>"/>
-			<h4><?php echo $this->escapeHtml($stitchpattern->title);?></h4>
-
-			<a class="btn btn-success btn-xs" href="<?php echo $this->url('stitchpattern',
-				array('action'=>'convert', 'id' => $stitchpattern->id));?>">
-				<?= $this->translate('Knit it'); ?> »
-			</a>
-		</div>
-	</article>
-<?php } ?>
-<?php if(!$iterated) :?>
-	<article>
-	<p><?=$this->translate('No one has shared their stitch patterns yet.');?></p>
-	</article>
-<?php endif; ?>
-</section>
+<?php echo $this->partial('stitch-pattern/stitch-pattern/public_list.phtml', array('stitchpatterns' => $this->stitchpatterns)); ?>

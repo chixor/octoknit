@@ -3,8 +3,7 @@
 <?php
 	if (!$user = $this->identity()) {
 ?>
-	<li><a class="btn btn-primary btn-xs" href="<?php echo $this->url('login');?>"><?php echo $this->translate('Log in'); ?></a></li>
-	<!--<li><a class="btn btn-primary btn-xs" href="<?php echo $this->url('registration');?>"><?php echo $this->translate('Sign up'); ?></a></li>-->
+	<li><a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#modalLogin">Login</a></li>
 <?php
 	}else{
 ?>

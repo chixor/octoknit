@@ -38,6 +38,10 @@
 
               $helper = new \StitchPattern\View\Helper\IsAllowed($auth, $acl);
               return $helper;
+            },
+            'timeAgo' => function($sm) {
+              $helper = new \StitchPattern\View\Helper\TimeAgo();
+              return $helper;
             }
         ),
     ),
