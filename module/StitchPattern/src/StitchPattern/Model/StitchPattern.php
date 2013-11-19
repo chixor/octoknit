@@ -28,6 +28,12 @@
 		$this->preview = substr($this->preview, strpos($this->preview,",")+1);
 		$this->previewDir = $this->getPreviewImageDir($this);
      }
+	 
+	 public function setId($id)
+	 {
+	 	$this->id = $id;
+		$this->previewDir = $this->getPreviewImageDir($this);
+	 }
 
      public function getArrayCopy()
      {

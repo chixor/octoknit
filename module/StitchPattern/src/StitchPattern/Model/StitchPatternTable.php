@@ -51,6 +51,7 @@
          $id = (int) $stitchpattern->id;
          if ($id == 0) {
              $this->tableGateway->insert($data);
+			 $stitchpattern->setId($this->tableGateway->lastInsertValue);
          } else {
              if ($this->getStitchPattern($id)) {
                  $this->tableGateway->update($data, array('id' => $id));
@@ -58,6 +59,7 @@
                  throw new \Exception('StitchPattern id does not exist');
              }
          }
+		 return $stitchpattern;
      }
 
      public function deleteStitchPattern($id)
