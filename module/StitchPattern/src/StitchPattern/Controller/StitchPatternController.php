@@ -12,6 +12,11 @@ class StitchPatternController extends AbstractActionController {
 	protected $usbcableTable;
 	protected $emulatorbridge;
 
+	/**
+     * @var Doctrine\ORM\EntityManager
+     */
+    protected $em;
+
 	public function indexAction() {
 		$this->layout()->setVariable('pageTypeList', true);
 		if($this->identity()) {
@@ -23,6 +28,23 @@ class StitchPatternController extends AbstractActionController {
 			return $vm;
 		} else {
 			return new ViewModel( array('stitchpatterns' => $this -> getStitchPatternTable() -> fetchPublic()));
+		}
+	}
+	
+	public function userAction()
+	{
+		$username = $this -> params() -> fromRoute('username', 0);
+		if (!$username) {
+			return $this -> redirect() -> toRoute('home');
+		}
+		
+		if ($user = $this->getEntityManager()->getRepository('CsnUser\Entity\User')->findOneBy(array('username' => $username))) {
+			return new ViewModel(array(
+				'user'=>$user,
+				'sharedSP' => $this -> getStitchPatternTable() -> fetchPublicFromUser($user->getId())
+			));
+		} else {
+			return $this -> redirect() -> toRoute('home');
 		}
 	}
 
@@ -181,4 +203,13 @@ class StitchPatternController extends AbstractActionController {
 		}
 		return $this -> emulatorbridge;
 	}
+	
+    public function getEntityManager()
+    {
+        if (null === $this->em) {
+            $this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        }
+
+        return $this->em;
+    }
 }

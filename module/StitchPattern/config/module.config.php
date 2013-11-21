@@ -21,6 +21,19 @@
                      ),
                  ),
              ),
+             'u' => array(
+                 'type'    => 'segment',
+                 'options' => array(
+                     'route'    => '/u[/][/:username]',
+                     'constraints' => array(
+                         'username' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                     ),
+                     'defaults' => array(
+                         'controller' => 'StitchPattern\Controller',
+                        'action'        => 'user',
+                     ),
+                 ),
+             ),
          ),
      ),
      'view_manager' => array(

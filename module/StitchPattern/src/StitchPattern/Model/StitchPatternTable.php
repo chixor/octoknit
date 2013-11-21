@@ -34,6 +34,15 @@
          return $resultSet;
      }
 
+     public function fetchPublicFromUser($id)
+     {
+         $resultSet = $this->tableGateway->select(function (\Zend\Db\Sql\Select $select) use ($id) {
+         	$select->join('user','stitchpattern.user_id = user.id', array('username'))->where("user.id = $id and shared = 1")->order('title');
+         });
+
+         return $resultSet;
+     }
+
      public function getStitchPattern($id)
      {
          $id  = (int) $id;
