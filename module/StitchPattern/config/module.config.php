@@ -26,7 +26,7 @@
                  'options' => array(
                      'route'    => '/u[/][/:username]',
                      'constraints' => array(
-                         'username' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                         'username' => '[a-zA-Z_-][a-zA-Z0-9_-]*',
                      ),
                      'defaults' => array(
                          'controller' => 'StitchPattern\Controller',
