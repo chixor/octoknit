@@ -37,8 +37,7 @@ class EmulatorBridge {
 		$result = shell_exec('python emulator/dumppattern.py '. $path . $dirname .'/file-01.dat 901');
 
 		// split pattern to tandy floppy drive tracks
-		shell_exec('python emulator/splitfile2track.py '. $path . $dirname .'/file-01.dat');
-		shell_exec('mv *.dat '. $path . $dirname .'/');
+		shell_exec('cd '. $path . $dirname . ' && python ../../../emulator/splitfile2track.py ./file-01.dat 2>&1');
 
 		return $result;
 	}
@@ -64,9 +63,6 @@ class EmulatorBridge {
 		//$command = 'ping 127.0.0.1';
 		$command = 'python -u emulator/PDDemulate.py '. $path . $dirname .'/ /dev/cu.usbserial-A4WYNI7I 2>&1';
 		system($command);
-		
-
-
 	}
 	
 	public function disable_ob() {

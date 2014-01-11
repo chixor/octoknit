@@ -513,7 +513,7 @@ class PDDemulator():
             psn, lsn = self.getPsnLsn(info)
             print 'FDC Read one Logical Sector %d' % psn
             sys.stdout.flush()
-            
+
             try:
                 sd = self.disk.readSector(psn, lsn)
             except:
@@ -527,6 +527,10 @@ class PDDemulator():
             go = self.readchar()
             if go == '\r':
                 self.writebytes(sd)
+
+            # we should exit when we're done (32 bit machines, ie Brother 950i, will read in sectors 0-31)
+            if psn == 31:
+                sys.exit()
 
         elif cmd == 'S':
             # We receive (optionally) PSN, (optionally) LSN
